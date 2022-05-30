@@ -33,50 +33,18 @@
 // include the library
  #include <Stepper.h>
 
-const int stepsPerNEMA_Revolution = 200;  // Motor Revolution NEMA17 motor Stepper #32A
-const int RA_GEER_to_NEMA_GEER = 20;  //10 Inch over 1/2 inch.
-const int stepsPerRevolution = stepsPerNEMA_Revolution * RA_GEER_to_NEMA_GEER; // Steps per RA gear revolution
-
-// Define some steppers and the pins they will use
-// initialize the Stepper object for Right Assention
-const int ENA = 9;  //Pins for H drivers A and B enable
-const int ENB = 10;
-const int IN1 = 8;  // pins for IN1, IN2, IN3, IN4,
-const int IN2 = 11;
-const int IN3 = 12;
-const int IN4 = 13;
+extern int stepsPerRevolution;
+extern const int ENA ;  //Pins for H drivers A and B enable
+extern const int ENB ;
+extern const int IN1 ;  // pins for IN1, IN2, IN3, IN4,
+extern const int IN2 ;
+extern const int IN3 ;
+extern const int IN4 ;
 
 Stepper rightAssentionStepper(stepsPerRevolution, IN1, IN2, IN3, IN4);
+//extern Stepper rightAssentionStepper(stepsPerRevolution, IN1, IN2, IN3, IN4);
+//extern Stepper rightAssentionStepper();
 
-
-const int HIGH_TIME_LED = 5000;
-const int LOW_TIME_LED = 5000;
-unsigned long lastLEDtime = 0;
-unsigned long nextLEDchange = 100; //time in ms.
-
-
-void enableRA_Stepper() {
-  pinMode(ENA, OUTPUT); //EnA
-  pinMode(ENB, OUTPUT);  //EnB
-  digitalWrite(ENA, HIGH);
-  digitalWrite(ENB, HIGH);
-}//end enableRA_Stepper()
-
-void disableRA_Stepper() {
-  //saves power
-  digitalWrite(ENA, LOW);
-  digitalWrite(ENB, LOW);
-}//end enableRA_Stepper()
-
-
-void wave() {
-  //Motor back and forth.
-  Serial.println("clockwise");
-  rightAssentionStepper.step(stepsPerRevolution / 10);
-  delay(100);
-  Serial.println("counterclockwise");
-  rightAssentionStepper.step(-stepsPerRevolution / 10);
-}//end wave()
 
 bool isMotorCW = true; //
 bool isAdvancing = true; //
