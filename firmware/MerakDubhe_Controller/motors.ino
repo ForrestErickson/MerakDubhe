@@ -10,9 +10,11 @@
 */
 
 /*
- * Stepper motor wirring notes. Facing Seeeds board wires are left to right:
- * Gray, Green, Red, Yellow.
- */
+   Stepper motor wirring notes. Facing Seeeds board wires are left to right:
+   Gray, Green, Red, Yellow.
+*/
+
+#include "microL298Stepper.h"
 
 const int stepsPerNEMA_Revolution = 200;  // Motor Revolution NEMA17 motor Stepper #32A
 const int RA_GEER_to_NEMA_GEER = 20;  //10 Inch over 1/2 inch.
@@ -20,12 +22,25 @@ int stepsPerRevolution = stepsPerNEMA_Revolution * RA_GEER_to_NEMA_GEER; // Step
 
 // Define some steppers and the pins they will use
 // initialize the Stepper object for Right Assention
+//These worked with Stepper library for full steps.
+//const int ENA = 9;  //Pins for H drivers A and B enable
+//const int ENB = 10;
+//const int IN1 = 8;  // pins for IN1, IN2, IN3, IN4,
+//const int IN2 = 11;
+//const int IN3 = 12;
+//const int IN4 = 13;
+
+              //non-pwm pwm   non-pwm   pwm
+//microStepper8::microStepper8(int coil1a, int coil1b, int coil2a, int coil2b)
 const int ENA = 9;  //Pins for H drivers A and B enable
 const int ENB = 10;
-const int IN1 = 8;  // pins for IN1, IN2, IN3, IN4,
-const int IN2 = 11;
+// pins for IN1, IN2, IN3, IN4,
+const int IN1 = 8;  //Non-pwm
+const int IN2 = 11;  //pwm
 const int IN3 = 12;
 const int IN4 = 13;
+
+
 
 //Stepper rightAssentionStepper(stepsPerRevolution, IN1, IN2, IN3, IN4);
 
@@ -43,12 +58,17 @@ void disableRA_Stepper() {
 }//end enableRA_Stepper()
 
 
+/*Move the motor back and forth just a bit. Attach the queen if you so desire.*/
 
 void wave() {
   //Motor back and forth.
   Serial.println("clockwise");
-  rightAssentionStepper.step(stepsPerRevolution / 10);
+  rightAssentionStepper.takestep(true);
+//  microStepper8->takestep(true);
+  //  rightAssentionStepper.step(stepsPerRevolution / 10);
   delay(100);
   Serial.println("counterclockwise");
-  rightAssentionStepper.step(-stepsPerRevolution / 10);
+  rightAssentionStepper.takestep(false);
+//  microStepper8->takestep(false);
+  //rightAssentionStepper.step(-stepsPerRevolution / 10);
 }//end wave()
