@@ -21,10 +21,12 @@
 
 #include "Arduino.h"
 
-class microStepper8
+//class microStepper8
+class microL298Stepper
 {
   public:
-    microStepper8(int coil1a, int coil1b, int coil2a, int coil2b);
+//    microStepper8(int coil1a, int coil1b, int coil2a, int coil2b);  //Old initiliazation
+    microL298Stepper(int coil1a, int coil1b, int pwm1, int coil2a, int coil2b, int pwm2);
     void disable();
     void takestep(boolean invert);
     
@@ -33,8 +35,10 @@ class microStepper8
     int _coil1b;
     int _coil2a;
     int _coil2b;
+    int _pwm1;
+    int _pwm2;
     
-    int _counter;
+        int _counter;
     boolean _invert;
     //const int microsteps = 16;
 

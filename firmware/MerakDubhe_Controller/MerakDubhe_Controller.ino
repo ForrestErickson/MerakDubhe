@@ -47,7 +47,8 @@ extern const int IN4 ;
 
 //microStepper8 rightAssentionStepper(stepsPerRevolution, IN1, IN2, IN3, IN4);
 
-microStepper8 rightAssentionStepper(IN1, IN2, IN3, IN4);  //Make an object of type microStepper8
+//microL298Stepper rightAssentionStepper(IN1, IN2, IN3, IN4);  //Make an object of type microStepper8
+microL298Stepper rightAssentionStepper(IN1, IN2, ENA, IN3, IN4, ENB);  //Make an object of type microStepper8
 
 //Stepper rightAssentionStepper(stepsPerRevolution, IN1, IN2, IN3, IN4);
 //extern Stepper rightAssentionStepper(stepsPerRevolution, IN1, IN2, IN3, IN4);

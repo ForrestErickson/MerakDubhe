@@ -19,8 +19,15 @@
 
 
 							//non-pwm	pwm		non-pwm		pwm
-microStepper8::microStepper8(int coil1a, int coil1b, int coil2a, int coil2b)
-{
+//microStepper8::microStepper8(int coil1a, int coil1b, int coil2a, int coil2b)
+
+//Pin pattern:  non-pwm non-pwm pwm   non-pwm   non-pwm  pwm
+microL298Stepper::microL298Stepper(int coil1a, int coil1b, int pwm1, int coil2a, int coil2b, int pwm2)
+{ 
+  digitalWrite(coil1a, LOW);
+  digitalWrite(coil1b, LOW);
+  digitalWrite(coil2a, LOW);
+  digitalWrite(coil2b, LOW);
   pinMode(coil1a, OUTPUT);
   pinMode(coil1b, OUTPUT);
   pinMode(coil2a, OUTPUT);
@@ -29,6 +36,8 @@ microStepper8::microStepper8(int coil1a, int coil1b, int coil2a, int coil2b)
   _coil1b = coil1b;
   _coil2a = coil2a;
   _coil2b = coil2b;
+  _pwm1 = pwm1;
+  _pwm2 = pwm2;
   _counter = 1;
 
   /*_steps = {
@@ -54,15 +63,17 @@ microStepper8::microStepper8(int coil1a, int coil1b, int coil2a, int coil2b)
 }
 
 
-void microStepper8::disable()
+void microL298Stepper::disable()
 {
   digitalWrite(_coil1a, LOW);
   digitalWrite(_coil1b, LOW);
   digitalWrite(_coil2a, LOW);
   digitalWrite(_coil2b, LOW);
+  analogWrite(_pwm1, 0);
+  analogWrite(_pwm2, 0);  
 }
 
-void microStepper8::takestep(boolean invert)
+void microL298Stepper::takestep(boolean invert)
 {
     if (invert == false) { // CW
       _counter = _counter + 1;
