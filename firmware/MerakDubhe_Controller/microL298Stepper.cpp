@@ -88,7 +88,8 @@ void microL298Stepper::takestep(boolean invert)
   Serial.print(" ");
   Serial.print(_steps[_counter][4]);
   Serial.print(" ");
-  Serial.println(_steps[_counter][5]);
+  Serial.print(_steps[_counter][5]);
+  Serial.println();
   
   // use digitalWrite to turn on coil, and analogWrite to create pwm for each coil
   digitalWrite(_coil1a, _steps[_counter][0]);
