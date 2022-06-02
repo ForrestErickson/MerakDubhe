@@ -30,7 +30,7 @@ int stepsPerRevolution = stepsPerNEMA_Revolution * RA_GEER_to_NEMA_GEER; // Step
 //const int IN3 = 12;
 //const int IN4 = 13;
 
-              //non-pwm pwm   non-pwm   pwm
+//non-pwm pwm   non-pwm   pwm
 //microStepper8::microStepper8(int coil1a, int coil1b, int coil2a, int coil2b)
 const int ENA = 9;  //Pins for H drivers A and B enable
 const int ENB = 10;
@@ -61,14 +61,26 @@ void disableRA_Stepper() {
 /*Move the motor back and forth just a bit. Attach the queen if you so desire.*/
 
 void wave() {
+  const  int NUMBER_OF_STEPS_WAVE = 100;
   //Motor back and forth.
   Serial.println("clockwise");
-  rightAssentionStepper.takestep(true);
-//  microStepper8->takestep(true);
+  for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
+    Serial.print(i);
+    Serial.print(": ");
+    rightAssentionStepper.takestep(true);
+    delay(100);
+  }
+
+  //  microStepper8->takestep(true);
   //  rightAssentionStepper.step(stepsPerRevolution / 10);
   delay(100);
   Serial.println("counterclockwise");
-  rightAssentionStepper.takestep(false);
-//  microStepper8->takestep(false);
+  for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
+    rightAssentionStepper.takestep(false);
+    Serial.print(i);
+    Serial.print(": ");
+    delay(100);
+  }
+  //  microStepper8->takestep(false);
   //rightAssentionStepper.step(-stepsPerRevolution / 10);
 }//end wave()

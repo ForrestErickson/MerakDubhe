@@ -35,7 +35,6 @@
 
 #include "microL298Stepper.h"
 
-
 extern int stepsPerRevolution;
 extern const int ENA ;  //Pins for H drivers A and B enable
 extern const int ENB ;
@@ -44,22 +43,19 @@ extern const int IN2 ;
 extern const int IN3 ;
 extern const int IN4 ;
 
-
 //microStepper8 rightAssentionStepper(stepsPerRevolution, IN1, IN2, IN3, IN4);
 
 //microL298Stepper rightAssentionStepper(IN1, IN2, IN3, IN4);  //Make an object of type microStepper8
-microL298Stepper rightAssentionStepper(IN1, IN2, ENA, IN3, IN4, ENB);  //Make an object of type microStepper8
+microL298Stepper rightAssentionStepper(IN1, IN2, ENA, IN3, IN4, ENB);  //Make an object of class type microL298Stepper
 
 //Stepper rightAssentionStepper(stepsPerRevolution, IN1, IN2, IN3, IN4);
 //extern Stepper rightAssentionStepper(stepsPerRevolution, IN1, IN2, IN3, IN4);
 //extern Stepper rightAssentionStepper();
 
-
 bool isMotorCW = true; //
 bool isAdvancing = true; //
 
 //Functions here
-
 
 //end functions
 
@@ -70,25 +66,23 @@ void setup()
   Serial.println(stepsPerRevolution);
 
   // Enable H drivers A and B
-    enableRA_Stepper();
-
+  enableRA_Stepper();
   //  rightAssentionStepper.setSpeed(6);
-  int stepCount = 10;
-  while (stepCount >0) {
+  //Lets wave back and forth
+  int waveCount = 10;
+  while (waveCount > 0) {
     wave();  //Motor back and forth.
-    stepCount--;
+    waveCount--;
   }
-
-  //  disableRA_Stepper();
-
+  disableRA_Stepper();
   //  rightAssentionStepper.disable();
-
   //  disableRA_Stepper();
 
   // Your application setup code here
   isMotorCW = true; //
   isAdvancing = true; //
 
+  Serial.println("End of setup.");
 }//end setup()
 
 void loop()

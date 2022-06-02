@@ -38,7 +38,7 @@ microL298Stepper::microL298Stepper(int coil1a, int coil1b, int pwm1, int coil2a,
   _coil2b = coil2b;
   _pwm1 = pwm1;
   _pwm2 = pwm2;
-  _counter = 1;
+  _counter = 0;
 
   /*_steps = {
     {1,   0,   0,   0},
@@ -92,7 +92,7 @@ void microL298Stepper::takestep(boolean invert)
       }
     }
     
-	/*Serial.print(_counter);
+	Serial.print(_counter);
 	Serial.print(" => ");
 	Serial.print(_steps[_counter][0]);
     Serial.print(" ");
@@ -100,11 +100,26 @@ void microL298Stepper::takestep(boolean invert)
     Serial.print(" ");
     Serial.print(_steps[_counter][2]);
     Serial.print(" ");
-    Serial.println(_steps[_counter][3]);*/
+    Serial.print(_steps[_counter][3]);
+    Serial.print(" ");
+    Serial.print(_steps[_counter][4]);
+    Serial.print(" ");
+    Serial.println(_steps[_counter][5]);
 
-	// use analogWrite to create pwm for each MOSFET
+//	// Old version of phasing write.
+//	//use analogWrite to create pwm for each MOSFET
+//    digitalWrite(_coil1a, _steps[_counter][0]);
+//    analogWrite(_coil1b, _steps[_counter][1]);
+//    digitalWrite(_coil2a, _steps[_counter][2]);
+//    analogWrite(_coil2b, _steps[_counter][3]);
+
+// use analogWrite to create pwm for each MOSFET  
     digitalWrite(_coil1a, _steps[_counter][0]);
-    analogWrite(_coil1b, _steps[_counter][1]);
-    digitalWrite(_coil2a, _steps[_counter][2]);
-    analogWrite(_coil2b, _steps[_counter][3]);
+    digitalWrite(_coil1b, _steps[_counter][1]);
+    analogWrite(_pwm1, _steps[_counter][2]);
+    
+    digitalWrite(_coil2a, _steps[_counter][3]);
+    digitalWrite(_coil2b, _steps[_counter][4]);
+    analogWrite(_pwm2, _steps[_counter][5]);
+
 }
