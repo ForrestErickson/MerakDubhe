@@ -2,11 +2,11 @@
    MerakDubhe_Controller
    A controler for the failed bench grinder becomes an equatorial mount ("turning sow's ear" into a mount)
 
-   Based on SEEED Studio Stepper Motor Control - one revolution
-   example usesf the <Stepper.h> library
+   Hardware includes SEEED Studio Stepper Motor Control shield Revision V1.0
 
    Forrest Lee Erickson
    Date: 20220529
+   Released into the public domain
 */
 
 /*
@@ -31,10 +31,10 @@
 */
 
 // include the library
-// #include <Stepper.h>
+#include "microL298Stepper.h"   //Library made by Forrest Erickson
+#define BAUDRATE 115200
 
-#include "microL298Stepper.h"
-
+/*Setup external constants */
 extern int stepsPerRevolution;
 extern const int ENA ;  //Pins for H drivers A and B enable
 extern const int ENB ;
@@ -43,10 +43,13 @@ extern const int IN2 ;
 extern const int IN3 ;
 extern const int IN4 ;
 
+extern String inputString;
+extern bool stringComplete;
+
 microL298Stepper rightAssentionStepper(IN1, IN2, ENA, IN3, IN4, ENB);  //Make an object of class type microL298Stepper
 
-//bool isMotorCW = true; //
-//bool isAdvancing = true; //
+bool isMotorCW = true; //
+bool isAdvancing = true; //
 
 //Functions here
 
@@ -54,16 +57,19 @@ microL298Stepper rightAssentionStepper(IN1, IN2, ENA, IN3, IN4, ENB);  //Make an
 
 void setup()
 {
-  Serial.begin(112500);
+  Serial.begin(BAUDRATE);
+  //setupSerialInput();
+  inputString.reserve(200);
+  Serial.println("MerakDubhe_Controller ");
   Serial.print("System stepsPerRevolution: ");
   Serial.println(stepsPerRevolution);
 
   // Enable H drivers A and B
   rightAssentionStepper.hold();
-//  enableRA_Stepper();   //This acts as an electronic break to prevent rotation
+  //  enableRA_Stepper();   //This acts as an electronic break to prevent rotation
 
   //Lets wave back and forth
-//  int waveCount = 10;
+  //  int waveCount = 10;
   int waveCount = 1;
   while (waveCount > 0) {
     wave();  //Motor back and forth.
@@ -74,14 +80,16 @@ void setup()
   rightAssentionStepper.disable();    //Save power.
 
   // Your application setup code here
-//  isMotorCW = true; //
-//  isAdvancing = true; //
+  //  isMotorCW = true; //
+  //  isAdvancing = true; //
 
   Serial.println("End of setup.");
 }//end setup()
 
 void loop()
 {
+
+  checkCommandInput();
 
   // Other code
 

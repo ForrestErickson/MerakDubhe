@@ -1,11 +1,11 @@
 /*
    motors
    For: MerakDubhe_Controller
-   Based on SEEED Studio Stepper Motor Control - one revolution
-   example usesf the <Stepper.h> library
+   Hardware includes SEEED Studio Stepper Motor Control shield Revision V1.0
 
    Forrest Lee Erickson
    Date: 20220529
+   Released into the public domain
 */
 
 /*
@@ -48,8 +48,8 @@ void disableRA_Stepper() {
 
 void wave() {
   const  int NUMBER_OF_STEPS_WAVE = 1600;
-//  const  int NUMBER_OF_STEPS_WAVE = 2;
-const int STEP_DELAY = 1;            //Delay between micro steps
+  //  const  int NUMBER_OF_STEPS_WAVE = 2;
+  const int STEP_DELAY = 1;            //Delay between micro steps
   //Motor back and forth.
   Serial.println("clockwise");
   for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
