@@ -47,17 +47,19 @@ void disableRA_Stepper() {
 
 /*Move the motor back and forth just a bit. Attach the queen if you so desire.*/
 
-void wave() {
+void wave(int stepDelay) {
   const  int NUMBER_OF_STEPS_WAVE = 1600;
   //  const  int NUMBER_OF_STEPS_WAVE = 2;
   const int STEP_DELAY = 1;            //Delay between micro steps
+  int _stepDelay = stepDelay;
   //Motor back and forth.
   Serial.println("clockwise");
   for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
     Serial.print(i);
     Serial.print(": ");
     rightAssentionStepper.takestep(true);
-    delay(STEP_DELAY);
+    //    delay(STEP_DELAY);
+    delay(_stepDelay);
   }
   delay(100);
   Serial.println("counterclockwise");
@@ -65,7 +67,8 @@ void wave() {
     rightAssentionStepper.takestep(false);
     Serial.print(i);
     Serial.print(": ");
-    delay(STEP_DELAY);
+    //    delay(STEP_DELAY);
+    delay(_stepDelay);
   }
   //  microStepper8->takestep(false);
   //rightAssentionStepper.step(-stepsPerRevolution / 10);

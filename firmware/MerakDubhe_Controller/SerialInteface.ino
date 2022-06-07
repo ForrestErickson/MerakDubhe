@@ -148,19 +148,24 @@ void processCommands() {
   int ret;
   //Command Strings
   strcpy(str1, "WAVE");
-//  strcpy(str2, "ABCDEF");
+  //  strcpy(str2, "ABCDEF");
   strcpy(str2, messageFromPC );
-//ret = strcmp(str1, str2);
-ret = strcmp(str1, messageFromPC);
+  //ret = strcmp(str1, str2);
+  ret = strcmp(str1, messageFromPC);
 
-   if(ret < 0) {
-      Serial.println("str1 is less than str2");
-   } else if(ret > 0) {
-      Serial.println("str2 is less than str1");
-   } else {
-      Serial.println("str1 is equal to str2");
-      wave();
-   }
+  if (ret < 0) {
+    Serial.println("str1 is less than str2");
+  } else if (ret > 0) {
+    Serial.println("str2 is less than str1");
+  } else {
+    Serial.println("str1 is equal to str2");
+    if (integerFromPC != 0) {
+      wave(integerFromPC);
+    } else {
+      wave(1);
+    }
+
+  }
 
 
 
