@@ -1,5 +1,6 @@
 /*
    motors
+   Makeing the motor(s) move.
    For: MerakDubhe_Controller
    Hardware includes SEEED Studio Stepper Motor Control shield Revision V1.0
 

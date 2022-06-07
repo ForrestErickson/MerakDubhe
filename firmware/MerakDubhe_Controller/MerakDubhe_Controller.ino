@@ -72,7 +72,7 @@ void setup()
   //  int waveCount = 10;
   int waveCount = 1;
   while (waveCount > 0) {
-    wave();  //Motor back and forth.
+//    wave();  //Motor back and forth.
     waveCount--;
     Serial.print("Wave count: ");
     Serial.println(waveCount);
