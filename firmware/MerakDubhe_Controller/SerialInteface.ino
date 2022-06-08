@@ -85,7 +85,7 @@ void checkCommandInput() {
 
     //Now parse commands to do something
     parseData(); //messageFromPC, Int from PC and Float from PC.
-//    showParsedData();
+    //    showParsedData();
     processCommands();
     // After proccessing command, clear the string and the flag
     inputString = "";
@@ -134,22 +134,10 @@ void showParsedData() {
 //<HELP>
 
 void processCommands() {
-  char COMMAND[32];
-  char str2[32];
-  int ret;
-  //Command Strings
-  //strcpy(COMMAND, "WAVE");
-  //  strcpy(str2, "ABCDEF");
-  //  strcpy(str2, messageFromPC );
-  //ret = strcmp(str1, str2);
-
-  ret = strcmp("WAVE", messageFromPC);
-  if (ret < 0) {
-    Serial.println("Message is less than COMMAND");
-  } else if (ret > 0) {
-    Serial.println("Message is Greater than COMMAND");
-  } else {
-    Serial.println("Message is equal to COMMAND");
+//Command Strings. Use strcmp which returns zero on a match.
+  // WAVE command
+  if (!strcmp("WAVE", messageFromPC)) {
+    Serial.println("Message is equal to WAVE");
     if (integerFromPC != 0) {
       wave(integerFromPC); //wave with number of steps.
     } else {
@@ -158,24 +146,14 @@ void processCommands() {
   }// end else equality.
 
   //Print help menu
-  ret = strcmp("HELP", messageFromPC);
-  if (ret < 0) {
-    Serial.println("Message is less than HELP");
-  } else if (ret > 0) {
-    Serial.println("Message is Greater than HELP");
-  } else {
+  if (!strcmp("HELP", messageFromPC)) {
     Serial.println("Message is equal to HELP");
     commandMenu();
-  }// end Print help menu
+  }//end help menu
 
-//Set or clear Break
-//<BREAK, 1> or <BREAK, 0>
-  ret = strcmp("BREAK", messageFromPC);
- if (ret < 0) {
-    Serial.println("Message is less than BREAK");
-  } else if (ret > 0) {
-    Serial.println("Message is Greater than BREAK");
-  } else {
+  //Set or clear Break
+  //<BREAK, 1> or <BREAK, 0>
+  if (!strcmp("BREAK", messageFromPC)) {
     Serial.println("Message is equal to BREAK");
     if (integerFromPC != 0) {
       rightAssentionStepper.hold(); //Set Break
@@ -184,28 +162,17 @@ void processCommands() {
     }
   }// end set or clear break
 
-//Report count
-//<count> 
-  ret = strcmp("count", messageFromPC);
- if (ret < 0) {
-    Serial.println("Message is less than count");
-  } else if (ret > 0) {
-    Serial.println("Message is Greater than count");
-  } else {
+  //Report COUNT
+  //<count>
+  if (!strcmp("COUNT", messageFromPC)) {
     Serial.println("Message is equal to 'count'");
- //
- Serial.print("Count = ");
- Serial.println(rightAssentionStepper.counter());
+    Serial.print("Count = ");
+    Serial.println(rightAssentionStepper.counter());
   }// end set or clear break
 
-//Take single step
-//<STEP, 1> or <STEP, 0> for forward or back
-  ret = strcmp("STEP", messageFromPC);
- if (ret < 0) {
-    Serial.println("Message is less than STEP");
-  } else if (ret > 0) {
-    Serial.println("Message is Greater than STEP");
-  } else {
+  //Take single step
+  //<STEP, 1> or <STEP, 0> for forward or back
+  if (!strcmp("STEP", messageFromPC)) {
     Serial.println("Message is equal to STEP");
     if (integerFromPC != 0) {
       rightAssentionStepper.takestep(true); //Set Break
@@ -221,22 +188,24 @@ void commandMenu()  {
   Serial.println("HELP for this menu.");
   Serial.println("BREAK, 1/0 for electronic break on/off.");
   Serial.println("STEP, 1/0 for step forward or back.");
-  Serial.println("count, report count.");
-  Serial.println("F for Forward.");
-  Serial.println("R for Reverse.");
+  Serial.println("COUNT, report count.");
   Serial.println("WAVE, 'n' for Wave motor forward and back by 'n'.");
-  Serial.println("H for Home the trolly.");
-  Serial.println("G for motor and photos Go.");
-  Serial.println("s for motor and photos sTOP.");
-  Serial.println("S to set motor Speed.");
-  Serial.println("T to report Time to travel rail.");
-  Serial.println("L/l increment or decrement percent Length of rail to travel");
-  Serial.println("E to set Exposure in seconds.");
-  Serial.println("A to trigger Auto Focus on camera.");
-  Serial.println("P to make Photo now!");
-  Serial.println("I to set photo Interval.");
-  Serial.println("N to set Number of photos during rail travel.");
-  Serial.println("M to refresh the Menu.");
+
+//  Serial.println("F for Forward.");
+//  Serial.println("R for Reverse.");
+//  Serial.println("H for Home the trolly.");
+//  Serial.println("G for motor and photos Go.");
+//  Serial.println("s for motor and photos sTOP.");
+//  Serial.println("S to set motor Speed.");
+//  Serial.println("T to report Time to travel rail.");
+//  Serial.println("L/l increment or decrement percent Length of rail to travel");
+//  Serial.println("E to set Exposure in seconds.");
+//  Serial.println("A to trigger Auto Focus on camera.");
+//  Serial.println("P to make Photo now!");
+//  Serial.println("I to set photo Interval.");
+//  Serial.println("N to set Number of photos during rail travel.");
+//  Serial.println("M to refresh the Menu.");
+  
   Serial.print("System stepsPerRevolution: ");
   Serial.println(stepsPerRevolution);
   Serial.println(""); //Leave space after menu.
@@ -247,3 +216,4 @@ void commandMenu()  {
 //200 step per rev motor times 20 reves per RA turn is 4000
 // 86,400 seconds / 4000 steps is 21.6 seconds per step
 // if we devide by 256 we have 84.375 mSeconds / step.
+// 4000 * 256 = 1,024,000 steps around the sky.
