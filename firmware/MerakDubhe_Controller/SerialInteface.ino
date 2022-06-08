@@ -42,7 +42,7 @@ void serialEvent() {
   //    if (inChar == '\n') {
   //      stringIsComplete = true;   // aka newData = true;
   //    }
-  //  }// end old serial avaialbe()
+  //  }// end old serial avaialbe() terminted with LF only.
 
   char rc;
   while (Serial.available() > 0 && newData == false) {
@@ -78,38 +78,27 @@ void serialEvent() {
 // print the string when complete with newline:
 //Make the command so something
 void checkCommandInput() {
-
-  //if (stringIsComplete) {
   if (newData) {
     Serial.print("Here is the command: ");
     Serial.println(inputString);
-
     strcpy(tempChars, receivedChars);
-    //    strcpy(tempChars, inputString);
 
     //Now parse commands to do something
     parseData(); //messageFromPC, Int from PC and Float from PC.
-    showParsedData();
-
+//    showParsedData();
     processCommands();
-
-    // clear the string:
+    // After proccessing command, clear the string and the flag
     inputString = "";
     newData = false;
-    //stringIsComplete = false;
-
-
-  }
+  }//end newData
 }// end checkCommandInput()
 
 /* Split the data into its parts
   Reference on using "strok" see: https://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm
-
   char *strcpy(char *dest, const char *src)
   Copies the string pointed to, by src to dest.
 */
 void parseData() {      // split the data into its parts
-
   char * strtokIndx; // this pointer is set by strtok() as an index
 
   strtokIndx = strtok(tempChars, ",");     // get the first part - the string
@@ -137,37 +126,124 @@ void showParsedData() {
 //============
 
 
-//Command Strings
-//strcpy(str1, "abcdef");
-//strcpy(str2, "ABCDEF");
+/* Global string messageFromPC.  */
+/*Serial in comand in the formate: */
+/*chararray messageFromPC, Int from PC and Float from PC. */
+// example srings
+// <WAVE, 5, 20>
+//<HELP>
 
-/*messageFromPC, Int from PC and Float from PC. */
 void processCommands() {
-  char str1[32];
+  char COMMAND[32];
   char str2[32];
   int ret;
   //Command Strings
-  strcpy(str1, "WAVE");
+  //strcpy(COMMAND, "WAVE");
   //  strcpy(str2, "ABCDEF");
-  strcpy(str2, messageFromPC );
+  //  strcpy(str2, messageFromPC );
   //ret = strcmp(str1, str2);
-  ret = strcmp(str1, messageFromPC);
 
+  ret = strcmp("WAVE", messageFromPC);
   if (ret < 0) {
-    Serial.println("str1 is less than str2");
+    Serial.println("Message is less than COMMAND");
   } else if (ret > 0) {
-    Serial.println("str2 is less than str1");
+    Serial.println("Message is Greater than COMMAND");
   } else {
-    Serial.println("str1 is equal to str2");
+    Serial.println("Message is equal to COMMAND");
     if (integerFromPC != 0) {
-      wave(integerFromPC);
+      wave(integerFromPC); //wave with number of steps.
     } else {
       wave(1);
     }
+  }// end else equality.
 
-  }
+  //Print help menu
+  ret = strcmp("HELP", messageFromPC);
+  if (ret < 0) {
+    Serial.println("Message is less than HELP");
+  } else if (ret > 0) {
+    Serial.println("Message is Greater than HELP");
+  } else {
+    Serial.println("Message is equal to HELP");
+    commandMenu();
+  }// end Print help menu
 
+//Set or clear Break
+//<BREAK, 1> or <BREAK, 0>
+  ret = strcmp("BREAK", messageFromPC);
+ if (ret < 0) {
+    Serial.println("Message is less than BREAK");
+  } else if (ret > 0) {
+    Serial.println("Message is Greater than BREAK");
+  } else {
+    Serial.println("Message is equal to BREAK");
+    if (integerFromPC != 0) {
+      rightAssentionStepper.hold(); //Set Break
+    } else {
+      rightAssentionStepper.disable(); //Release Break
+    }
+  }// end set or clear break
 
+//Report count
+//<count> 
+  ret = strcmp("count", messageFromPC);
+ if (ret < 0) {
+    Serial.println("Message is less than count");
+  } else if (ret > 0) {
+    Serial.println("Message is Greater than count");
+  } else {
+    Serial.println("Message is equal to 'count'");
+ //
+ Serial.print("Count = ");
+ Serial.println(rightAssentionStepper.counter());
+  }// end set or clear break
 
+//Take single step
+//<STEP, 1> or <STEP, 0> for forward or back
+  ret = strcmp("STEP", messageFromPC);
+ if (ret < 0) {
+    Serial.println("Message is less than STEP");
+  } else if (ret > 0) {
+    Serial.println("Message is Greater than STEP");
+  } else {
+    Serial.println("Message is equal to STEP");
+    if (integerFromPC != 0) {
+      rightAssentionStepper.takestep(true); //Set Break
+    } else {
+      rightAssentionStepper.takestep(false); //Release Break
+    }
+  }// end set or clear break
 
 }// end processCommands
+
+void commandMenu()  {
+  Serial.println("\f\n===== MerakDubhe Command Menu =====") ;
+  Serial.println("HELP for this menu.");
+  Serial.println("BREAK, 1/0 for electronic break on/off.");
+  Serial.println("STEP, 1/0 for step forward or back.");
+  Serial.println("count, report count.");
+  Serial.println("F for Forward.");
+  Serial.println("R for Reverse.");
+  Serial.println("WAVE, 'n' for Wave motor forward and back by 'n'.");
+  Serial.println("H for Home the trolly.");
+  Serial.println("G for motor and photos Go.");
+  Serial.println("s for motor and photos sTOP.");
+  Serial.println("S to set motor Speed.");
+  Serial.println("T to report Time to travel rail.");
+  Serial.println("L/l increment or decrement percent Length of rail to travel");
+  Serial.println("E to set Exposure in seconds.");
+  Serial.println("A to trigger Auto Focus on camera.");
+  Serial.println("P to make Photo now!");
+  Serial.println("I to set photo Interval.");
+  Serial.println("N to set Number of photos during rail travel.");
+  Serial.println("M to refresh the Menu.");
+  Serial.print("System stepsPerRevolution: ");
+  Serial.println(stepsPerRevolution);
+  Serial.println(""); //Leave space after menu.
+
+}// end commandMenu
+
+//Note 24*60*60= 86,400
+//200 step per rev motor times 20 reves per RA turn is 4000
+// 86,400 seconds / 4000 steps is 21.6 seconds per step
+// if we devide by 256 we have 84.375 mSeconds / step.

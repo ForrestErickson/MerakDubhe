@@ -29,6 +29,7 @@ class microL298Stepper
     void hold();                                //Energise coils for electronic break. Opposit of disable.
     void disable();                             //Releases electronic break.
     void takestep(boolean invert);
+    int counter(); // Returns _counter
 
   private:
     int _coil1a;

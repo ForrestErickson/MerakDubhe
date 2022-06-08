@@ -34,16 +34,28 @@ microL298Stepper::microL298Stepper(int coil1a, int coil1b, int pwm1, int coil2a,
   _counter = 0;
 }//Class decleration
 
+int microL298Stepper::counter(){
+  return(_counter); 
+}// end counter
 
 /*Set coils on and full PWM to act as electronic break to hold against rotation*/
 void microL298Stepper::hold()
 {
-  digitalWrite(_coil1a, HIGH);
-  digitalWrite(_coil1b, LOW);
-  digitalWrite(_coil2a, HIGH);
-  digitalWrite(_coil2b, LOW);
-  analogWrite(_pwm1, 255);
-  analogWrite(_pwm2, 255);
+  digitalWrite(_coil1a, _steps[_counter][0]);
+  digitalWrite(_coil1b, _steps[_counter][1]);
+  analogWrite(_pwm1, _steps[_counter][2]);
+  digitalWrite(_coil2a, _steps[_counter][3]);
+  digitalWrite(_coil2b, _steps[_counter][4]);
+  analogWrite(_pwm2, _steps[_counter][5]);
+
+
+//  digitalWrite(_coil1a, HIGH);
+//  digitalWrite(_coil1b, LOW);
+//  digitalWrite(_coil2a, HIGH);
+//  digitalWrite(_coil2b, LOW);
+//  analogWrite(_pwm1, 255);
+//  analogWrite(_pwm2, 255);
+
 }//end hold()
 
 

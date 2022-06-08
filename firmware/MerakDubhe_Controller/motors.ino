@@ -45,8 +45,11 @@ void disableRA_Stepper() {
 }//end enableRA_Stepper()
 
 
-/*Move the motor back and forth just a bit. Attach the queen if you so desire.*/
-
+/*
+  Move the motor back and forth just a bit. Attach the queen if you so desire.
+  This function blocks.
+  Argument is step delay in mSec.
+*/
 void wave(int stepDelay) {
   const  int NUMBER_OF_STEPS_WAVE = 1600;
   //  const  int NUMBER_OF_STEPS_WAVE = 2;
@@ -60,7 +63,7 @@ void wave(int stepDelay) {
     rightAssentionStepper.takestep(true);
     //    delay(STEP_DELAY);
     delay(_stepDelay);
-  }
+  }//end CW
   delay(100);
   Serial.println("counterclockwise");
   for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
@@ -69,7 +72,6 @@ void wave(int stepDelay) {
     Serial.print(": ");
     //    delay(STEP_DELAY);
     delay(_stepDelay);
-  }
-  //  microStepper8->takestep(false);
-  //rightAssentionStepper.step(-stepsPerRevolution / 10);
+  }//end CCW
+  rightAssentionStepper.disable();    //Save power.
 }//end wave()

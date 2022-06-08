@@ -48,8 +48,8 @@ extern bool stringComplete;
 
 microL298Stepper rightAssentionStepper(IN1, IN2, ENA, IN3, IN4, ENB);  //Make an object of class type microL298Stepper
 
-bool isMotorCW = true; //
-bool isAdvancing = true; //
+//bool isMotorCW = true; //
+//bool isAdvancing = true; //
 
 //Functions here
 
@@ -61,29 +61,8 @@ void setup()
   //setupSerialInput();
   inputString.reserve(200);
   Serial.println("MerakDubhe_Controller ");
-  Serial.print("System stepsPerRevolution: ");
-  Serial.println(stepsPerRevolution);
-
-  // Enable H drivers A and B
-  rightAssentionStepper.hold();
-  //  enableRA_Stepper();   //This acts as an electronic break to prevent rotation
-
-  //Lets wave back and forth
-  //  int waveCount = 10;
-  int waveCount = 1;
-  while (waveCount > 0) {
-//    wave();  //Motor back and forth.
-    waveCount--;
-    Serial.print("Wave count: ");
-    Serial.println(waveCount);
-  }
-  rightAssentionStepper.disable();    //Save power.
-
-  // Your application setup code here
-  //  isMotorCW = true; //
-  //  isAdvancing = true; //
-
-  Serial.println("End of setup.");
+  //Serial.println("End of setup.");
+  commandMenu();
 }//end setup()
 
 void loop()
