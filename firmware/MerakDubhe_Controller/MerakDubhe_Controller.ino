@@ -43,13 +43,15 @@ extern const int IN2 ;
 extern const int IN3 ;
 extern const int IN4 ;
 
-extern String inputString;
+//extern String inputString;
 extern bool stringComplete;
 
 microL298Stepper rightAssentionStepper(IN1, IN2, ENA, IN3, IN4, ENB);  //Make an object of class type microL298Stepper
 
 //bool isMotorCW = true; //
 //bool isAdvancing = true; //
+
+bool isTracking = false; //
 
 //Functions here
 
@@ -59,7 +61,7 @@ void setup()
 {
   Serial.begin(BAUDRATE);
   //setupSerialInput();
-  inputString.reserve(200);
+//  inputString.reserve(200);
   Serial.println("MerakDubhe_Controller ");
   //Serial.println("End of setup.");
   commandMenu();

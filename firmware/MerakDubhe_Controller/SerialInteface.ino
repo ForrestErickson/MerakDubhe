@@ -3,9 +3,8 @@
   //Library made by Forrest Erickson
 */
 
-String inputString = "";         // a String to hold incoming data
-// bool stringIsComplete = false;  // whether the string is complete
-//extern bool stringComplete;
+extern bool isTracking ; //
+// String inputString = "";         // a String to hold incoming data
 
 const byte numChars = 32;
 char receivedChars[numChars];
@@ -20,7 +19,7 @@ boolean newData = false;
 
 /* initialize serial:  */
 void setupSerialInput() {
-  inputString.reserve(200);         //  reserve 200 bytes for the inputString:
+//  inputString.reserve(200);         //  reserve 200 bytes for the inputString:
 }//end setupSerialInput
 
 
@@ -67,12 +66,10 @@ void serialEvent() {
         newData = true;
       }
     }//end of RecvInProgress
-
     else if (rc == startMarker) {
       recvInProgress = true;
     }
   }//end serial avaiable and new data false.
-
 }// end serialEvent
 
 // print the string when complete with newline:
@@ -80,7 +77,7 @@ void serialEvent() {
 void checkCommandInput() {
   if (newData) {
     Serial.print("Here is the command: ");
-    Serial.println(inputString);
+    Serial.println(receivedChars);
     strcpy(tempChars, receivedChars);
 
     //Now parse commands to do something
@@ -88,12 +85,12 @@ void checkCommandInput() {
     //    showParsedData();
     processCommands();
     // After proccessing command, clear the string and the flag
-    inputString = "";
+//    inputString = "";
     newData = false;
   }//end newData
 }// end checkCommandInput()
 
-/* Split the data into its parts
+/* Split the ',' delimited data into its parts
   Reference on using "strok" see: https://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm
   char *strcpy(char *dest, const char *src)
   Copies the string pointed to, by src to dest.
@@ -115,11 +112,11 @@ void parseData() {      // split the data into its parts
 //============
 
 void showParsedData() {
-  Serial.print("Message ");
-  Serial.println(messageFromPC);
-  Serial.print("Integer ");
-  Serial.println(integerFromPC);
-  Serial.print("Float ");
+  Serial.print("Message= ");
+  Serial.print(messageFromPC);
+  Serial.print(", Integer= ");
+  Serial.print(integerFromPC);
+  Serial.print(", Float= ");
   Serial.println(floatFromPC);
 }//end showParsedData()
 
@@ -163,23 +160,53 @@ void processCommands() {
   }// end set or clear break
 
   //Report COUNT
-  //<count>
+  //<COUNT>
   if (!strcmp("COUNT", messageFromPC)) {
     Serial.println("Message is equal to 'count'");
     Serial.print("Count = ");
     Serial.println(rightAssentionStepper.counter());
-  }// end set or clear break
+  }// end report count.
 
   //Take single step
   //<STEP, 1> or <STEP, 0> for forward or back
   if (!strcmp("STEP", messageFromPC)) {
     Serial.println("Message is equal to STEP");
     if (integerFromPC != 0) {
-      rightAssentionStepper.takestep(true); //Set Break
+      rightAssentionStepper.takestep(true); //step forward
     } else {
-      rightAssentionStepper.takestep(false); //Release Break
+      rightAssentionStepper.takestep(false); //step back
     }
-  }// end set or clear break
+  }// end single step
+
+   //Take micro step 255
+  //<STEP, 1> or <STEP, 0> for forward or back
+  if (!strcmp("MICRO", messageFromPC)) {
+    int *b;
+    Serial.println("Message is equal to MICRO");
+    b = rightAssentionStepper.steps1024(integerFromPC);
+//    if (integerFromPC != 0) {
+//      //steps1024(int count)
+//      b = rightAssentionStepper.steps1024(0);
+//      
+//    } else {
+//      b = rightAssentionStepper.steps1024(1);      
+//    }
+
+    Serial.println();
+  }// end single step
+  
+  //Set TRACK state variable
+  //<TRACK, 1> or <TRACK, 0> for starting or stopping tracking of RA
+  if (!strcmp("TRACK", messageFromPC)) {
+    Serial.println("Message is equal to TRACK");
+    if (integerFromPC != 0) {
+      //Set isTracking;
+      isTracking = true;
+    } else {
+      //Clear isTracking;
+      isTracking = false;
+    }
+  }// end set/clear Tracking
 
 }// end processCommands
 
@@ -190,6 +217,10 @@ void commandMenu()  {
   Serial.println("STEP, 1/0 for step forward or back.");
   Serial.println("COUNT, report count.");
   Serial.println("WAVE, 'n' for Wave motor forward and back by 'n'.");
+  Serial.println("TRACK, 1/0 for forward or back."); //Sets/clears isTracking
+  Serial.println("SLEW, SPEED, DISTANCE"); // Speed is positive or negative. Distance in ?steps?
+  Serial.println("GUIDE, SPEED, DISTANCE"); // Speed is positive or negative. Distance in ?steps?
+
 
 //  Serial.println("F for Forward.");
 //  Serial.println("R for Reverse.");
