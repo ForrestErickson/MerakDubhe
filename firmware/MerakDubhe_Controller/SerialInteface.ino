@@ -191,13 +191,8 @@ void processCommands() {
    //Take micro step 255
   //<STEP, 1> or <STEP, 0> for forward or back
   if (!strcmp("MICRO", messageFromPC)) {
-//    int *b;
-    byte *b;
     Serial.println("Message is equal to MICRO");
-//    b = rightAssentionStepper.steps1024(integerFromPC);
     rightAssentionStepper.takeMicroStep(integerFromPC);
-    Serial.println();
-   Serial.println(*b);
   }// end single step
   
   //Set TRACK state variable

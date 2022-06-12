@@ -133,31 +133,23 @@ void microL298Stepper::takeMicroStep(boolean invert)
 //  p = _steps1024(0);
   p = _steps1024(_counter);
 
-  Serial.print(_counter);
-  Serial.print("\n Microstep => ");
-
-  Serial.print("p= ");
-  //  Serial.print(*p);
-  Serial.print(int(p[0]));
-  Serial.print(", ");
-  Serial.print(int(p[1]));
-  Serial.print(", ");
-  Serial.print(int(p[2]));
-  Serial.print(", ");
-  Serial.print(int(p[3]));
-  Serial.print(", ");
-  Serial.print(int(p[4]));
-  Serial.print(", ");
-  Serial.print(int(p[5]));
-  Serial.println();
-
-  // use digitalWrite to turn on coil, and analogWrite to create pwm for each coil
-  //  digitalWrite(_coil1a, _steps1024[_counter][0]);
-  //  digitalWrite(_coil1b, _steps1024[_counter][1]);
-  //  analogWrite(_pwm1, _steps1024[_counter][2]);
-  //  digitalWrite(_coil2a, _steps1024[_counter][3]);
-  //  digitalWrite(_coil2b, _steps1024[_counter][4]);
-  //  analogWrite(_pwm2, _steps1024[_counter][5]);
+//  Serial.print(_counter);
+  Serial.print("\nMicrostep => ");
+//
+//  Serial.print("p= ");
+//  //  Serial.print(*p);
+//  Serial.print(int(p[0]));
+//  Serial.print(", ");
+//  Serial.print(int(p[1]));
+//  Serial.print(", ");
+//  Serial.print(int(p[2]));
+//  Serial.print(", ");
+//  Serial.print(int(p[3]));
+//  Serial.print(", ");
+//  Serial.print(int(p[4]));
+//  Serial.print(", ");
+//  Serial.print(int(p[5]));
+//  Serial.println();
 
     digitalWrite(_coil1a, int(p[0]));
     digitalWrite(_coil1b, int(p[1]));

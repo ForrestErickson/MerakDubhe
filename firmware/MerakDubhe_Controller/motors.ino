@@ -52,8 +52,6 @@ void disableRA_Stepper() {
 */
 void wave(int stepDelay) {
   const  int NUMBER_OF_STEPS_WAVE = 1600;
-  //  const  int NUMBER_OF_STEPS_WAVE = 2;
-  const int STEP_DELAY = 1;            //Delay between micro steps
   int _stepDelay = stepDelay;
   //Motor back and forth.
   Serial.println("clockwise");
@@ -61,7 +59,6 @@ void wave(int stepDelay) {
     Serial.print(i);
     Serial.print(": ");
     rightAssentionStepper.takestep(true);
-    //    delay(STEP_DELAY);
     delay(_stepDelay);
   }//end CW
   delay(100);
@@ -70,7 +67,6 @@ void wave(int stepDelay) {
     rightAssentionStepper.takestep(false);
     Serial.print(i);
     Serial.print(": ");
-    //    delay(STEP_DELAY);
     delay(_stepDelay);
   }//end CCW
   rightAssentionStepper.disable();    //Save power.
@@ -84,26 +80,23 @@ void wave(int stepDelay) {
   Argument is step delay in mSec.
 */
 void microWave(int stepDelay) {
-  const  int NUMBER_OF_STEPS_WAVE = 1600;
-  //  const  int NUMBER_OF_STEPS_WAVE = 2;
-  const int STEP_DELAY = 1;            //Delay between micro steps
+//  const  int NUMBER_OF_STEPS_WAVE = 1600;
+  const  int NUMBER_OF_STEPS_WAVE = 1024;
   int _stepDelay = stepDelay;
-  //Motor back and forth.
+  Serial.println("Motor back and forth.");
   Serial.println("clockwise");
   for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
     Serial.print(i);
     Serial.print(": ");
     rightAssentionStepper.takeMicroStep(true);
-    //    delay(STEP_DELAY);
     delay(_stepDelay);
   }//end CW
-  delay(100);
+  delay(1000);
   Serial.println("counterclockwise");
   for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
     rightAssentionStepper.takeMicroStep(false);
     Serial.print(i);
     Serial.print(": ");
-    //    delay(STEP_DELAY);
     delay(_stepDelay);
   }//end CCW
   rightAssentionStepper.disable();    //Save power.

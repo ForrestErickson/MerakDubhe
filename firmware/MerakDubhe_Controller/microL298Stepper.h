@@ -33,7 +33,6 @@ class microL298Stepper
     void takeMicroStep(boolean invert);
     long longCounter(); // Returns _longCounter
     int counter(); // Returns _counter
-//    int *steps1024(int count);
     byte *steps1024(int count);
 
   private:
@@ -44,7 +43,7 @@ class microL298Stepper
     int _pwm1;
     int _pwm2;
     int _counter;
-    long _longCounter;
+//    long _longCounter;
     boolean _invert;
 
     //?16? steps: uint8_t microstepcurve[] = {0, 19, 75, 157, 255};
@@ -80,13 +79,8 @@ class microL298Stepper
     };//end _steps
 
     /*Returns pointer to an array for the value of count*/
-    //Does this need to have long argument?
-    //    int * _steps1024(int count) {
-    //    int * _steps1024(long count)[6] {
-    //byte _steps1024[int count][6] = {
     //(int coil1a, int coil1b, int pwm1, int coil2a, int coil2b, int pwm2)
     //1a, 1b, pwm1, 2a, 2b, pwm2)
-
     byte * _steps1024(int count) {
       static byte r[6];
 
@@ -100,15 +94,15 @@ class microL298Stepper
         r[0] = 1; r[1] = 0; r[2] = (count - 768); r[3] = 0; r[4] = 1; r[5] = (1023 - count);
       }//end calcaulation from count
 
-      //Print it out
-      for ( int i = 0; i < 6; ++i) {
-        //Serial.println( "r[%d] = %d\n", i, r[i]);
-        Serial.print( "r[");
-        Serial.print( i);
-        Serial.print( "] = ");
-        Serial.print( int(r[i]));
-        Serial.print(", ");
-      }//end print it out
+//      //Print it out
+//      for ( int i = 0; i < 6; ++i) {
+//        //Serial.println( "r[%d] = %d\n", i, r[i]);
+//        Serial.print( "r[");
+//        Serial.print( i);
+//        Serial.print( "] = ");
+//        Serial.print( int(r[i]));
+//        Serial.print(", ");
+//      }//end print it out
 
       return (r);// The coils and PWM patterns for 256 steps on 4 phases
     }// end steps1024
@@ -116,123 +110,4 @@ class microL298Stepper
     //return (*_steps1024);
 
 };//end class microL298Stepper
-
-
-//Old step paterns from library as copyed
-//Old four argument step pattern
-//1/4 step
-/*
-   {0,   0,   1,   0},
-    {1,   157,   1,   19},
-    {1,   75,   1,   75},
-    {1,   19,   1,   157},
-
-    {1,   0,   1,   255},
-    {1, 19,   0,   98},
-    {1, 75,   0,   180},
-    {1, 157,   0,   236},
-
-    {1, 255,   0,   255},
-    {0, 98,   0,   236},
-    {0, 180,   0, 180},
-    {0, 236,   0, 98},
-
-    {0,   255,   0, 0},
-    {0,   236,   1, 157},
-    {0,   180,   1, 75},
-    {0,   0,   1, 19}
-*/
-
-//halfstep
-/*{1,   0,   0,   0},
-  {1,   0,   0,   0},
-  {1,   0,   1,   0},
-  {1,   0,   1,   0},
-
-  {0,   0,   1,   0},
-  {0,   0,   1,   0},
-  {0, 255,   1,   0},
-  {0, 255,   1,   0},
-
-  {0, 255,   0,   0},
-  {0, 255,   0,   0},
-  {0, 255,   0, 255},
-  {0, 255,   0, 255},
-
-  {0,   0,   0, 255},
-  {0,   0,   0, 255},
-  {1,   0,   0, 255},
-  {1,   0,   0, 255}*/
-
-//full step
-/*{1,   0,   0,   0},
-  {1,   0,   0,   0},
-  {1,   0,   0,   0},
-  {1,   0,   0,   0},
-
-  {0,   0,   1,   0},
-  {0,   0,   1,   0},
-  {0,   0,   1,   0},
-  {0,   0,   1,   0},
-
-  {0, 255,   0,   0},
-  {0, 255,   0,   0},
-  {0, 255,   0,   0},
-  {0, 255,   0,   0},
-
-  {0,   0,   0, 255},
-  {0,   0,   0, 255},
-  {0,   0,   0, 255},
-  {0,   0,   0, 255}*/
-
-//Pattern ???
-/*{1,   0,   1, 255}, //!
-  {1, 110,   1, 215},
-  {1, 170,   1, 170},
-  {1, 245,   1,  60},
-
-  {0,   0,   1,   0}, //!
-  {0,  30,   1,  60},
-  {0,  85,   1, 170},
-  {0, 155,   1, 225},
-
-  {0, 255,   0,   0}, //!
-  {0, 255,   0,   0},
-  {0, 255,   0,   0},
-  {0, 255,   0,   0},
-
-  {1, 255,   0, 255}, //!
-  {0,   0,   0, 255},
-  {0,   0,   0, 255},
-  {0,   0,   0, 255}*/
-
-/*{1,   0,   0,   0},
-  {1,   0,   0,  50},
-  {1,   0,   0, 120},
-  {1,   0,   0, 255},
-
-  {1, 135,   0, 255},
-  {1, 205,   0, 255},
-  {1, 255,   0, 255},
-  {0,  50,   0, 255},
-
-  {0, 120,   0, 255},
-  {0, 255,   0, 255},
-  {0, 255,   0, 120},
-  {0, 255,   0,  50},
-
-  {0,  75,   1,   0},
-  {0,  19,   1,   0},
-  {0,   0,   1,   0},
-  {0, 255,   1, 255},
-  {0, 255,   0,  98},
-  {0, 255,   0, 180},
-  {0, 170,   0, 236},
-  {0,  85,   0, 255},
-  {1,  85,   0, 255},
-  {1, 170,   0, 255},
-  {1,  85,   0, 255},
-  {1,   0,   0,  85}*/
-
-
 #endif
