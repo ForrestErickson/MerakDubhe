@@ -30,8 +30,11 @@ class microL298Stepper
     void hold();                                //Energise coils for electronic break. Opposit of disable.
     void disable();                             //Releases electronic break.
     void takestep(boolean invert);
-    long counter(); // Returns _counter
-    int *steps1024(int count);
+    void takeMicroStep(boolean invert);
+    long longCounter(); // Returns _longCounter
+    int counter(); // Returns _counter
+//    int *steps1024(int count);
+    byte *steps1024(int count);
 
   private:
     int _coil1a;
@@ -40,7 +43,8 @@ class microL298Stepper
     int _coil2b;
     int _pwm1;
     int _pwm2;
-    long _counter;
+    int _counter;
+    long _longCounter;
     boolean _invert;
 
     //?16? steps: uint8_t microstepcurve[] = {0, 19, 75, 157, 255};
@@ -76,38 +80,37 @@ class microL298Stepper
     };//end _steps
 
     /*Returns pointer to an array for the value of count*/
-    int * _steps1024(int count) {
-      //byte _steps1024[int count][6] = {
-      //(int coil1a, int coil1b, int pwm1, int coil2a, int coil2b, int pwm2)
+    //Does this need to have long argument?
+    //    int * _steps1024(int count) {
+    //    int * _steps1024(long count)[6] {
+    //byte _steps1024[int count][6] = {
+    //(int coil1a, int coil1b, int pwm1, int coil2a, int coil2b, int pwm2)
+    //1a, 1b, pwm1, 2a, 2b, pwm2)
 
-      //1a, 1b, pwm1, 2a, 2b, pwm2)
-      static int r[6];
+    byte * _steps1024(int count) {
+      static byte r[6];
 
       if (count < 256) {        //phase1
         r[0] = 1; r[1] = 0; r[2] = (255 - count); r[3] = 1; r[4] = 0; r[5] = count;
-        //  Serial.println(1, 0, (256 - count), 1, 0, count);
-        
-        //Print it out
-        for ( int i = 0; i < 6; ++i) {
-          //Serial.println( "r[%d] = %d\n", i, r[i]);
-          Serial.print( "r[");
-          Serial.print( i);
-          Serial.print( "] = ");
-          Serial.print( int(r[i]));
-          Serial.print(", ");
-//          Serial.print( "r[%d] = %d\n", i, r[i]);
-        }
-//        Serial.println(1, 0, (256 - count), 1, 0, count);
-        return (r);
-      }
-      
-//      else if (count < 512) {        //phase2
-//        return (0, 1, (count - 512), 1, 0, 512 - count);
-//      } else if (count < 768) {      //phase4
-//        return (0, 1, 768 - count, 0, 1, count - 768));
-//      } else { // count between 767 and 1024       //phase4
-//        return (1, 0, count - 1024, 0, 1, 1024 - (count));
-//      }
+      } else if (count < 512) {        //phase2
+        r[0] = 0; r[1] = 1; r[2] = (count - 256); r[3] = 1; r[4] = 0; r[5] = (511 - count);
+      } else if (count < 768) {      //phase3
+        r[0] = 0; r[1] = 1; r[2] = (767 - count); r[3] = 0; r[4] = 1; r[5] = (count - 512);
+      } else { // count between 767 and 1024       //phase4
+        r[0] = 1; r[1] = 0; r[2] = (count - 768); r[3] = 0; r[4] = 1; r[5] = (1023 - count);
+      }//end calcaulation from count
+
+      //Print it out
+      for ( int i = 0; i < 6; ++i) {
+        //Serial.println( "r[%d] = %d\n", i, r[i]);
+        Serial.print( "r[");
+        Serial.print( i);
+        Serial.print( "] = ");
+        Serial.print( int(r[i]));
+        Serial.print(", ");
+      }//end print it out
+
+      return (r);// The coils and PWM patterns for 256 steps on 4 phases
     }// end steps1024
 
     //return (*_steps1024);

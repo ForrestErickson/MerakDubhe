@@ -75,3 +75,36 @@ void wave(int stepDelay) {
   }//end CCW
   rightAssentionStepper.disable();    //Save power.
 }//end wave()
+
+
+/*
+  Usint 255 micro steps
+  Move the motor back and forth just a bit. Attach the queen if you so desire.
+  This function blocks.
+  Argument is step delay in mSec.
+*/
+void microWave(int stepDelay) {
+  const  int NUMBER_OF_STEPS_WAVE = 1600;
+  //  const  int NUMBER_OF_STEPS_WAVE = 2;
+  const int STEP_DELAY = 1;            //Delay between micro steps
+  int _stepDelay = stepDelay;
+  //Motor back and forth.
+  Serial.println("clockwise");
+  for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
+    Serial.print(i);
+    Serial.print(": ");
+    rightAssentionStepper.takeMicroStep(true);
+    //    delay(STEP_DELAY);
+    delay(_stepDelay);
+  }//end CW
+  delay(100);
+  Serial.println("counterclockwise");
+  for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
+    rightAssentionStepper.takeMicroStep(false);
+    Serial.print(i);
+    Serial.print(": ");
+    //    delay(STEP_DELAY);
+    delay(_stepDelay);
+  }//end CCW
+  rightAssentionStepper.disable();    //Save power.
+}//end wave()

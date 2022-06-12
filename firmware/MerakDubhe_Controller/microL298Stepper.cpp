@@ -34,12 +34,14 @@ microL298Stepper::microL298Stepper(int coil1a, int coil1b, int pwm1, int coil2a,
   _counter = 0;
 }//Class decleration
 
-long microL298Stepper::counter(){
-  return(_counter); 
+//long microL298Stepper::counter(){
+int microL298Stepper::counter() {
+  return (_counter);
 }// end counter
 
-int * microL298Stepper::steps1024(int count){  
-  return(_steps1024(count)); 
+//int * microL298Stepper::steps1024(int count){
+byte * microL298Stepper::steps1024(int count) {
+  return (_steps1024(count));
 }// end counter
 
 
@@ -108,3 +110,62 @@ void microL298Stepper::takestep(boolean invert)
   analogWrite(_pwm2, _steps[_counter][5]);
 
 }//end takestep
+
+/*takeMicroStep forward or reverse*/
+void microL298Stepper::takeMicroStep(boolean invert)
+{
+  byte * p ; //Pointer to byte array of aize six.
+  if (invert == false) { // CW
+    _counter = _counter + 1;
+    // roll over counter if they go too high
+    if (_counter >= microsteps1024) {
+      _counter = 0;
+    }
+  }
+  else { // CCW
+    _counter = _counter - 1;
+    // reset counter if they go too low
+    if (_counter < 0) {
+      _counter = microsteps1024 - 1;
+    }
+  }
+
+//  p = _steps1024(0);
+  p = _steps1024(_counter);
+
+  Serial.print(_counter);
+  Serial.print("\n Microstep => ");
+
+  Serial.print("p= ");
+  //  Serial.print(*p);
+  Serial.print(int(p[0]));
+  Serial.print(", ");
+  Serial.print(int(p[1]));
+  Serial.print(", ");
+  Serial.print(int(p[2]));
+  Serial.print(", ");
+  Serial.print(int(p[3]));
+  Serial.print(", ");
+  Serial.print(int(p[4]));
+  Serial.print(", ");
+  Serial.print(int(p[5]));
+  Serial.println();
+
+  // use digitalWrite to turn on coil, and analogWrite to create pwm for each coil
+  //  digitalWrite(_coil1a, _steps1024[_counter][0]);
+  //  digitalWrite(_coil1b, _steps1024[_counter][1]);
+  //  analogWrite(_pwm1, _steps1024[_counter][2]);
+  //  digitalWrite(_coil2a, _steps1024[_counter][3]);
+  //  digitalWrite(_coil2b, _steps1024[_counter][4]);
+  //  analogWrite(_pwm2, _steps1024[_counter][5]);
+
+    digitalWrite(_coil1a, int(p[0]));
+    digitalWrite(_coil1b, int(p[1]));
+    analogWrite(_pwm1, int(p[2]));
+    digitalWrite(_coil2a, int(p[3]));
+    digitalWrite(_coil2b, int(p[4]));
+    analogWrite(_pwm2, int(p[5]));
+
+
+
+}//end takeMicroStep

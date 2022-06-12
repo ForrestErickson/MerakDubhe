@@ -142,6 +142,16 @@ void processCommands() {
     }
   }// end else equality.
 
+  // MICROWAVE command
+  if (!strcmp("MICROWAVE", messageFromPC)) {
+    Serial.println("Message is equal to MICROWAVE");
+    if (integerFromPC != 0) {
+      microWave(integerFromPC); //wave with number of steps.
+    } else {
+      microWave(1);
+    }
+  }// end else equality.
+
   //Print help menu
   if (!strcmp("HELP", messageFromPC)) {
     Serial.println("Message is equal to HELP");
@@ -181,18 +191,13 @@ void processCommands() {
    //Take micro step 255
   //<STEP, 1> or <STEP, 0> for forward or back
   if (!strcmp("MICRO", messageFromPC)) {
-    int *b;
+//    int *b;
+    byte *b;
     Serial.println("Message is equal to MICRO");
-    b = rightAssentionStepper.steps1024(integerFromPC);
-//    if (integerFromPC != 0) {
-//      //steps1024(int count)
-//      b = rightAssentionStepper.steps1024(0);
-//      
-//    } else {
-//      b = rightAssentionStepper.steps1024(1);      
-//    }
-
+//    b = rightAssentionStepper.steps1024(integerFromPC);
+    rightAssentionStepper.takeMicroStep(integerFromPC);
     Serial.println();
+   Serial.println(*b);
   }// end single step
   
   //Set TRACK state variable
@@ -212,14 +217,21 @@ void processCommands() {
 
 void commandMenu()  {
   Serial.println("\f\n===== MerakDubhe Command Menu =====") ;
+  Serial.println("\f\n===== 20220615 13:37 =====") ;
   Serial.println("HELP for this menu.");
   Serial.println("BREAK, 1/0 for electronic break on/off.");
   Serial.println("STEP, 1/0 for step forward or back.");
   Serial.println("COUNT, report count.");
   Serial.println("WAVE, 'n' for Wave motor forward and back by 'n'.");
+  Serial.println("MICROWAVE, 'n' for microWave motor forward and back by 'n'.");
+//  Serial.println("MICRO, 'n' display motor winding and PWM for microWave.");
+  Serial.println("MICRO, 'n' Single 256 micro step.");
   Serial.println("TRACK, 1/0 for forward or back."); //Sets/clears isTracking
   Serial.println("SLEW, SPEED, DISTANCE"); // Speed is positive or negative. Distance in ?steps?
   Serial.println("GUIDE, SPEED, DISTANCE"); // Speed is positive or negative. Distance in ?steps?
+
+
+
 
 
 //  Serial.println("F for Forward.");
