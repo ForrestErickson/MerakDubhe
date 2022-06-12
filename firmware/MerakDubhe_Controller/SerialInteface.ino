@@ -192,13 +192,13 @@ void processCommands() {
   //<REV, 1> or <REV, 0> for forward or back
   if (!strcmp("REV", messageFromPC)) {
     Serial.println("Message is equal to REV");
-    if (integerFromPC != 0) {//200 steps forward
-      for (int i = 0; i < 200; i++) {
+    if (integerFromPC != 0) {//800 quarter steps forward
+      for (int i = 0; i < 800; i++) {
         rightAssentionStepper.takestep(true); //step forward
       }
 
     } else {
-      for (int i = 0; i < 200; i++) {
+      for (int i = 0; i < 800; i++) {
         rightAssentionStepper.takestep(false); //step back
       }
     }//end else
