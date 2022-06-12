@@ -196,14 +196,33 @@ void processCommands() {
       for (int i = 0; i < 800; i++) {
         rightAssentionStepper.takestep(true); //step forward
       }
-
     } else {
       for (int i = 0; i < 800; i++) {
         rightAssentionStepper.takestep(false); //step back
       }
     }//end else
-  }// end single step
+    rightAssentionStepper.disable();
+  }// end REV
 
+  //Micro Revolution of motor, 200*256 micro steps 
+  //<MICROREV, 1> or <MICROREV, 0> for forward or back
+  if (!strcmp("MICROREV", messageFromPC)) {
+    long REV_SIZE = 200 * 256L;
+    Serial.println("Message is equal to MICROREV");
+    Serial.print("REV_SIZE is: ");
+    Serial.println(REV_SIZE);
+
+    if (integerFromPC != 0) {//800 quarter steps forward
+      for (long i = 0; i < (REV_SIZE); i++) {
+        rightAssentionStepper.takeMicroStep(true); //step forward
+      }
+    } else {
+      for (long i = 0; i < (REV_SIZE); i++) {
+        rightAssentionStepper.takeMicroStep(false); //step back
+      }
+    }//end else
+    rightAssentionStepper.disable();
+  }// end MICROREV
 
   //Take micro step 255
   //<STEP, 1> or <STEP, 0> for forward or back
@@ -236,12 +255,11 @@ void commandMenu()  {
   Serial.println("COUNT, report count.");
   Serial.println("WAVE, 'n' for Wave motor forward and back by 'n'.");
   Serial.println("MICROWAVE, 'n' for microWave motor forward and back by 'n'.");
-  //  Serial.println("MICRO, 'n' display motor winding and PWM for microWave.");
   Serial.println("MICRO, 'n' Single 256 micro step.");
   Serial.println("REV, 1/0 for step forward or back. Makes Steps 200 times.");
+  Serial.println("MICROREV, 1/0 for step forward or back. REVolution in microSteps 200*256 times.");
 
-
-
+  //  Serial.println("STOP, stops stepping and disables motor.");
   //  Serial.println("TRACK, 1/0 for forward or back."); //Sets/clears isTracking
   //  Serial.println("SLEW, SPEED, DISTANCE"); // Speed is positive or negative. Distance in ?steps?
   //  Serial.println("GUIDE, SPEED, DISTANCE"); // Speed is positive or negative. Distance in ?steps?
