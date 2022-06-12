@@ -43,7 +43,7 @@ class microL298Stepper
     int _pwm1;
     int _pwm2;
     int _counter;
-//    long _longCounter;
+    long _longCounter = 0;
     boolean _invert;
 
     //?16? steps: uint8_t microstepcurve[] = {0, 19, 75, 157, 255};

@@ -19,7 +19,7 @@ boolean newData = false;
 
 /* initialize serial:  */
 void setupSerialInput() {
-//  inputString.reserve(200);         //  reserve 200 bytes for the inputString:
+  //  inputString.reserve(200);         //  reserve 200 bytes for the inputString:
 }//end setupSerialInput
 
 
@@ -85,7 +85,7 @@ void checkCommandInput() {
     //    showParsedData();
     processCommands();
     // After proccessing command, clear the string and the flag
-//    inputString = "";
+    //    inputString = "";
     newData = false;
   }//end newData
 }// end checkCommandInput()
@@ -131,7 +131,7 @@ void showParsedData() {
 //<HELP>
 
 void processCommands() {
-//Command Strings. Use strcmp which returns zero on a match.
+  //Command Strings. Use strcmp which returns zero on a match.
   // WAVE command
   if (!strcmp("WAVE", messageFromPC)) {
     Serial.println("Message is equal to WAVE");
@@ -188,13 +188,30 @@ void processCommands() {
     }
   }// end single step
 
-   //Take micro step 255
+  //Revolution of motor, 200 steps
+  //<REV, 1> or <REV, 0> for forward or back
+  if (!strcmp("REV", messageFromPC)) {
+    Serial.println("Message is equal to REV");
+    if (integerFromPC != 0) {//200 steps forward
+      for (int i = 0; i < 200; i++) {
+        rightAssentionStepper.takestep(true); //step forward
+      }
+
+    } else {
+      for (int i = 0; i < 200; i++) {
+        rightAssentionStepper.takestep(false); //step back
+      }
+    }//end else
+  }// end single step
+
+
+  //Take micro step 255
   //<STEP, 1> or <STEP, 0> for forward or back
   if (!strcmp("MICRO", messageFromPC)) {
     Serial.println("Message is equal to MICRO");
     rightAssentionStepper.takeMicroStep(integerFromPC);
   }// end single step
-  
+
   //Set TRACK state variable
   //<TRACK, 1> or <TRACK, 0> for starting or stopping tracking of RA
   if (!strcmp("TRACK", messageFromPC)) {
@@ -219,31 +236,35 @@ void commandMenu()  {
   Serial.println("COUNT, report count.");
   Serial.println("WAVE, 'n' for Wave motor forward and back by 'n'.");
   Serial.println("MICROWAVE, 'n' for microWave motor forward and back by 'n'.");
-//  Serial.println("MICRO, 'n' display motor winding and PWM for microWave.");
+  //  Serial.println("MICRO, 'n' display motor winding and PWM for microWave.");
   Serial.println("MICRO, 'n' Single 256 micro step.");
-  Serial.println("TRACK, 1/0 for forward or back."); //Sets/clears isTracking
-  Serial.println("SLEW, SPEED, DISTANCE"); // Speed is positive or negative. Distance in ?steps?
-  Serial.println("GUIDE, SPEED, DISTANCE"); // Speed is positive or negative. Distance in ?steps?
+  Serial.println("REV, 1/0 for step forward or back. Makes Steps 200 times.");
+
+
+
+  //  Serial.println("TRACK, 1/0 for forward or back."); //Sets/clears isTracking
+  //  Serial.println("SLEW, SPEED, DISTANCE"); // Speed is positive or negative. Distance in ?steps?
+  //  Serial.println("GUIDE, SPEED, DISTANCE"); // Speed is positive or negative. Distance in ?steps?
 
 
 
 
 
-//  Serial.println("F for Forward.");
-//  Serial.println("R for Reverse.");
-//  Serial.println("H for Home the trolly.");
-//  Serial.println("G for motor and photos Go.");
-//  Serial.println("s for motor and photos sTOP.");
-//  Serial.println("S to set motor Speed.");
-//  Serial.println("T to report Time to travel rail.");
-//  Serial.println("L/l increment or decrement percent Length of rail to travel");
-//  Serial.println("E to set Exposure in seconds.");
-//  Serial.println("A to trigger Auto Focus on camera.");
-//  Serial.println("P to make Photo now!");
-//  Serial.println("I to set photo Interval.");
-//  Serial.println("N to set Number of photos during rail travel.");
-//  Serial.println("M to refresh the Menu.");
-  
+  //  Serial.println("F for Forward.");
+  //  Serial.println("R for Reverse.");
+  //  Serial.println("H for Home the trolly.");
+  //  Serial.println("G for motor and photos Go.");
+  //  Serial.println("s for motor and photos sTOP.");
+  //  Serial.println("S to set motor Speed.");
+  //  Serial.println("T to report Time to travel rail.");
+  //  Serial.println("L/l increment or decrement percent Length of rail to travel");
+  //  Serial.println("E to set Exposure in seconds.");
+  //  Serial.println("A to trigger Auto Focus on camera.");
+  //  Serial.println("P to make Photo now!");
+  //  Serial.println("I to set photo Interval.");
+  //  Serial.println("N to set Number of photos during rail travel.");
+  //  Serial.println("M to refresh the Menu.");
+
   Serial.print("System stepsPerRevolution: ");
   Serial.println(stepsPerRevolution);
   Serial.println(""); //Leave space after menu.

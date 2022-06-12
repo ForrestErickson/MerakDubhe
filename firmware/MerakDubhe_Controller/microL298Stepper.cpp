@@ -112,6 +112,7 @@ void microL298Stepper::takestep(boolean invert)
 }//end takestep
 
 /*takeMicroStep forward or reverse*/
+// _longCounter tracks the position.
 void microL298Stepper::takeMicroStep(boolean invert)
 {
   byte * p ; //Pointer to byte array of aize six.
@@ -121,6 +122,7 @@ void microL298Stepper::takeMicroStep(boolean invert)
     if (_counter >= microsteps1024) {
       _counter = 0;
     }
+    _longCounter++;
   }
   else { // CCW
     _counter = _counter - 1;
@@ -128,14 +130,16 @@ void microL298Stepper::takeMicroStep(boolean invert)
     if (_counter < 0) {
       _counter = microsteps1024 - 1;
     }
+    _longCounter--;
   }
 
 //  p = _steps1024(0);
   p = _steps1024(_counter);
 
 //  Serial.print(_counter);
-  Serial.print("\nMicrostep => ");
-//
+  Serial.print("Microstep count: ");
+  Serial.println(_longCounter);
+
 //  Serial.print("p= ");
 //  //  Serial.print(*p);
 //  Serial.print(int(p[0]));

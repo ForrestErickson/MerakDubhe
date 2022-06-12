@@ -57,7 +57,6 @@ void wave(int stepDelay) {
   Serial.println("clockwise");
   for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
     Serial.print(i);
-    Serial.print(": ");
     rightAssentionStepper.takestep(true);
     delay(_stepDelay);
   }//end CW
@@ -65,8 +64,7 @@ void wave(int stepDelay) {
   Serial.println("counterclockwise");
   for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
     rightAssentionStepper.takestep(false);
-    Serial.print(i);
-    Serial.print(": ");
+    Serial.print(-i);
     delay(_stepDelay);
   }//end CCW
   rightAssentionStepper.disable();    //Save power.
@@ -87,7 +85,6 @@ void microWave(int stepDelay) {
   Serial.println("clockwise");
   for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
     Serial.print(i);
-    Serial.print(": ");
     rightAssentionStepper.takeMicroStep(true);
     delay(_stepDelay);
   }//end CW
@@ -95,8 +92,7 @@ void microWave(int stepDelay) {
   Serial.println("counterclockwise");
   for (int i = 0; i < NUMBER_OF_STEPS_WAVE; i++) {
     rightAssentionStepper.takeMicroStep(false);
-    Serial.print(i);
-    Serial.print(": ");
+    Serial.print(-i);
     delay(_stepDelay);
   }//end CCW
   rightAssentionStepper.disable();    //Save power.
