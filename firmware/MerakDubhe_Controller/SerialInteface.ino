@@ -6,7 +6,7 @@
 extern float microStepPeriod;
 
 extern bool isTracking ; //
-extern bool isNorthTracking; 
+extern bool isNorthTracking;
 // String inputString = "";         // a String to hold incoming data
 
 const byte numChars = 32;
@@ -234,6 +234,14 @@ void processCommands() {
     rightAssentionStepper.takeMicroStep(integerFromPC);
   }// end single step
 
+  //STOP tracking state. Disable electronic break.
+  //<STOP> for stopping tracking of RA
+  if (!strcmp("STOP", messageFromPC) || !strcmp("stop", messageFromPC)) {
+    Serial.println("Message is equal to STOP");
+    isTracking = false;
+    rightAssentionStepper.disable();
+  }// end set/clear Tracking
+
   //Set TRACK state variable
   //<TRACK, 1> or <TRACK, 0> for starting or stopping tracking of RA
   if (!strcmp("TRACK", messageFromPC)) {
@@ -248,7 +256,7 @@ void processCommands() {
   }// end set/clear Tracking
 
 
-Serial.println("NORTH, 1/0 for northern or southern."); //Sets/clears CCW or CW rotation
+  Serial.println("NORTH, 1/0 for northern or southern."); //Sets/clears CCW or CW rotation
   //Set NORTH state variable
   //<NORTH, 1> or <NORTH, 0> for starting or stopping tracking of RA
   if (!strcmp("NORTH", messageFromPC)) {
@@ -260,7 +268,7 @@ Serial.println("NORTH, 1/0 for northern or southern."); //Sets/clears CCW or CW 
       //Clear isTracking;
       isNorthTracking = false;
     }
-  }// end set/clear Tracking
+  }// end set/clear North direction of tracking
 
 
 
@@ -280,7 +288,7 @@ void commandMenu()  {
   Serial.println("MICROREV, 1/0 for step forward or back. REVolution in microSteps 200*256 times.");
 
   Serial.println("STOP, stops stepping and disables motor.");
-  Serial.println("TRACK, 1/0 for forward or back."); //Sets/clears isTracking
+  Serial.println("TRACK, 1/0 for tracking on / off."); //Sets/clears isTracking
   Serial.println("NORTH, 1/0 for northern or southern."); //Sets/clears CCW or CW rotation
 
 
