@@ -28,6 +28,20 @@
 
 //float microStepPeriod = mSecondsPerSideralDay/totalMicroStepsPerRevolution;// Should be 84.14462890625
 float microStepPeriod = 84.14462890625;   // Should be 84.14462890625
+float nextSideralStep = 0;                // Acumulate sideral time for steps.
+
+void updateTracking() {
+  if (isTracking) {
+    if (millis() > nextSideralStep) {
+      //Make a step, Set next step time
+      rightAssentionStepper.takeMicroStep(isNorthTracking);
+      nextSideralStep = nextSideralStep + microStepPeriod;
+    }//end next step
+  }//end is tracking
+
+
+}//end updateTracking
+
 
 void printMotorAndGear() {
   Serial.print("System stepsPerNEMA_Revolution: ");

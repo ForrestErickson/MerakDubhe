@@ -6,6 +6,7 @@
 extern float microStepPeriod;
 
 extern bool isTracking ; //
+extern bool isNorthTracking; 
 // String inputString = "";         // a String to hold incoming data
 
 const byte numChars = 32;
@@ -246,6 +247,23 @@ void processCommands() {
     }
   }// end set/clear Tracking
 
+
+Serial.println("NORTH, 1/0 for northern or southern."); //Sets/clears CCW or CW rotation
+  //Set NORTH state variable
+  //<NORTH, 1> or <NORTH, 0> for starting or stopping tracking of RA
+  if (!strcmp("NORTH", messageFromPC)) {
+    Serial.println("Message is equal to NORTH");
+    if (integerFromPC != 0) {
+      //Set isTracking;
+      isNorthTracking = true;
+    } else {
+      //Clear isTracking;
+      isNorthTracking = false;
+    }
+  }// end set/clear Tracking
+
+
+
 }// end processCommands
 
 void commandMenu()  {
@@ -261,8 +279,12 @@ void commandMenu()  {
   Serial.println("REV, 1/0 for step forward or back. Makes Steps 200 times.");
   Serial.println("MICROREV, 1/0 for step forward or back. REVolution in microSteps 200*256 times.");
 
-  //  Serial.println("STOP, stops stepping and disables motor.");
-  //  Serial.println("TRACK, 1/0 for forward or back."); //Sets/clears isTracking
+  Serial.println("STOP, stops stepping and disables motor.");
+  Serial.println("TRACK, 1/0 for forward or back."); //Sets/clears isTracking
+  Serial.println("NORTH, 1/0 for northern or southern."); //Sets/clears CCW or CW rotation
+
+
+
   //  Serial.println("SLEW, SPEED, DISTANCE"); // Speed is positive or negative. Distance in ?steps?
   //  Serial.println("GUIDE, SPEED, DISTANCE"); // Speed is positive or negative. Distance in ?steps?
 

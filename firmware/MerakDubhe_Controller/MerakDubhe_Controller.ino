@@ -50,10 +50,9 @@ extern bool stringComplete;
 
 microL298Stepper rightAssentionStepper(IN1, IN2, ENA, IN3, IN4, ENB);  //Make an object of class type microL298Stepper
 
-//bool isMotorCW = true; //
-//bool isAdvancing = true; //
 
 bool isTracking = false; //
+bool isNorthTracking = true; //To Do, Save setting for this in EEPROM
 
 //Functions here
 
@@ -74,6 +73,7 @@ void loop()
 {
 
   checkCommandInput();
+  updateTracking();
 
   // Other code
 
