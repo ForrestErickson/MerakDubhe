@@ -43,23 +43,23 @@ void updateTracking() {
 }//end updateTracking
 
 
-void printMotorAndGear() {
-  Serial.print("System stepsPerNEMA_Revolution: ");
-  Serial.println(stepsPerNEMA_Revolution);
-  Serial.print("System microSteps_PerRevolution: ");
-  Serial.println(microSteps_PerRevolution);
-  Serial.print("System RA_GEER_to_NEMA_GEER: ");
-  Serial.println(RA_GEER_to_NEMA_GEER);
-  Serial.print("System stepsPerShaftRevolution: ");
-  Serial.println(stepsPerShaftRevolution);
-  Serial.print("System totalMicroStepsPerRevolution: ");
-  Serial.println(totalMicroStepsPerRevolution);
-  Serial.print("System mSecondsPerSideralDay: ");
-  Serial.println(mSecondsPerSideralDay);
-  Serial.print("System microStepPeriod: ");
-  Serial.println(microStepPeriod, 6);
-
-}// end printMotorAndGear
+//void printMotorAndGear() {
+//  Serial.print("System stepsPerNEMA_Revolution: ");
+//  Serial.println(stepsPerNEMA_Revolution);
+//  Serial.print("System microSteps_PerRevolution: ");
+//  Serial.println(microSteps_PerRevolution);
+//  Serial.print("System RA_GEER_to_NEMA_GEER: ");
+//  Serial.println(RA_GEER_to_NEMA_GEER);
+//  Serial.print("System stepsPerShaftRevolution: ");
+//  Serial.println(stepsPerShaftRevolution);
+//  Serial.print("System totalMicroStepsPerRevolution: ");
+//  Serial.println(totalMicroStepsPerRevolution);
+//  Serial.print("System mSecondsPerSideralDay: ");
+//  Serial.println(mSecondsPerSideralDay);
+//  Serial.print("System microStepPeriod: ");
+//  Serial.println(microStepPeriod, 6);
+//
+//}// end printMotorAndGear
 
 // Define some steppers and the pins they will use for Seeeds Studio Motor Shield V1.0
 const int ENA = 9;  //Pins for H drivers A and B enable

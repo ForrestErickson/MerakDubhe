@@ -62,6 +62,8 @@ void setup()
 {
   delay(100);
   Serial.begin(BAUDRATE);
+  delay(100);
+  //  while (!Serial);  // wait for serial port to connect. Needed for native USB
   Serial.println();
   Serial.println("MerakDubhe_Controller ");
 
@@ -73,12 +75,12 @@ void setup()
 
   //Speed up PWM above audio so motor does not sing.
   TCCR1B = TCCR1B & B11111000 | B00000001; // PWM 62745.10 Hz pins 9 and 10, No prescaling,  clkI/O/1.
-  Serial.print("TCCR1B= ");
-  Serial.println(TCCR1B);
+  //  Serial.print("TCCR1B= ");
+  //  Serial.println(TCCR1B);
 
   //setupSerialInput();
   //  inputString.reserve(200);
-  printMotorAndGear();
+  // printMotorAndGear();   //Remed out of code 20220613
   //Serial.println("End of setup.");
   commandMenu();
 }//end setup()
