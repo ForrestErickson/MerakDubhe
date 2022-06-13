@@ -60,10 +60,24 @@ bool isNorthTracking = true; //To Do, Save setting for this in EEPROM
 
 void setup()
 {
+  delay(100);
   Serial.begin(BAUDRATE);
+  Serial.println();
+  Serial.println("MerakDubhe_Controller ");
+
+  //  Serial.print("TCCR1B= "); //Printe default TCCR1B
+  //  Serial.println(TCCR1B);
+  //  TCCR1B = TCCR1B & B11111000 | B00000011; // Set for  clkI/O/64 (From prescaler
+  //  Serial.print("TCCR1B= "); //Starts at clkI/O/64 (From prescaler
+  //  Serial.println(TCCR1B);
+
+  //Speed up PWM above audio so motor does not sing.
+  TCCR1B = TCCR1B & B11111000 | B00000001; // PWM 62745.10 Hz pins 9 and 10, No prescaling,  clkI/O/1.
+  Serial.print("TCCR1B= ");
+  Serial.println(TCCR1B);
+
   //setupSerialInput();
   //  inputString.reserve(200);
-  Serial.println("MerakDubhe_Controller ");
   printMotorAndGear();
   //Serial.println("End of setup.");
   commandMenu();
