@@ -7,6 +7,8 @@
    Forrest Lee Erickson
    Date: 20220529
    Released into the public domain
+   Usefull reference is: https://learn.adafruit.com/diy-robotic-sky-tracking-astrophotography-mount/code
+
 */
 
 /*
@@ -35,7 +37,7 @@
 #define BAUDRATE 115200
 
 /*Setup external constants */
-extern int stepsPerRevolution;
+//extern long totalMicroStepsPerRevolution;
 extern const int ENA ;  //Pins for H drivers A and B enable
 extern const int ENB ;
 extern const int IN1 ;  // pins for IN1, IN2, IN3, IN4,
@@ -61,8 +63,9 @@ void setup()
 {
   Serial.begin(BAUDRATE);
   //setupSerialInput();
-//  inputString.reserve(200);
+  //  inputString.reserve(200);
   Serial.println("MerakDubhe_Controller ");
+  printMotorAndGear();
   //Serial.println("End of setup.");
   commandMenu();
 }//end setup()

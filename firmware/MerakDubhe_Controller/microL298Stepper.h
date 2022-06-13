@@ -94,15 +94,15 @@ class microL298Stepper
         r[0] = 1; r[1] = 0; r[2] = (count - 768); r[3] = 0; r[4] = 1; r[5] = (1023 - count);
       }//end calcaulation from count
 
-//      //Print it out
-//      for ( int i = 0; i < 6; ++i) {
-//        //Serial.println( "r[%d] = %d\n", i, r[i]);
-//        Serial.print( "r[");
-//        Serial.print( i);
-//        Serial.print( "] = ");
-//        Serial.print( int(r[i]));
-//        Serial.print(", ");
-//      }//end print it out
+      //      //Print it out
+      //      for ( int i = 0; i < 6; ++i) {
+      //        //Serial.println( "r[%d] = %d\n", i, r[i]);
+      //        Serial.print( "r[");
+      //        Serial.print( i);
+      //        Serial.print( "] = ");
+      //        Serial.print( int(r[i]));
+      //        Serial.print(", ");
+      //      }//end print it out
 
       return (r);// The coils and PWM patterns for 256 steps on 4 phases
     }// end steps1024

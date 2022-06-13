@@ -133,34 +133,34 @@ void microL298Stepper::takeMicroStep(boolean invert)
     _longCounter--;
   }
 
-//  p = _steps1024(0);
+  //  p = _steps1024(0);
   p = _steps1024(_counter);
 
-//  Serial.print(_counter);
+  //  Serial.print(_counter);
   Serial.print("Microstep count: ");
   Serial.println(_longCounter);
 
-//  Serial.print("p= ");
-//  //  Serial.print(*p);
-//  Serial.print(int(p[0]));
-//  Serial.print(", ");
-//  Serial.print(int(p[1]));
-//  Serial.print(", ");
-//  Serial.print(int(p[2]));
-//  Serial.print(", ");
-//  Serial.print(int(p[3]));
-//  Serial.print(", ");
-//  Serial.print(int(p[4]));
-//  Serial.print(", ");
-//  Serial.print(int(p[5]));
-//  Serial.println();
+  //  Serial.print("p= ");
+  //  //  Serial.print(*p);
+  //  Serial.print(int(p[0]));
+  //  Serial.print(", ");
+  //  Serial.print(int(p[1]));
+  //  Serial.print(", ");
+  //  Serial.print(int(p[2]));
+  //  Serial.print(", ");
+  //  Serial.print(int(p[3]));
+  //  Serial.print(", ");
+  //  Serial.print(int(p[4]));
+  //  Serial.print(", ");
+  //  Serial.print(int(p[5]));
+  //  Serial.println();
 
-    digitalWrite(_coil1a, int(p[0]));
-    digitalWrite(_coil1b, int(p[1]));
-    analogWrite(_pwm1, int(p[2]));
-    digitalWrite(_coil2a, int(p[3]));
-    digitalWrite(_coil2b, int(p[4]));
-    analogWrite(_pwm2, int(p[5]));
+  digitalWrite(_coil1a, int(p[0]));
+  digitalWrite(_coil1b, int(p[1]));
+  analogWrite(_pwm1, int(p[2]));
+  digitalWrite(_coil2a, int(p[3]));
+  digitalWrite(_coil2b, int(p[4]));
+  analogWrite(_pwm2, int(p[5]));
 
 
 

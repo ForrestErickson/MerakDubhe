@@ -3,6 +3,8 @@
   //Library made by Forrest Erickson
 */
 
+extern float microStepPeriod;
+
 extern bool isTracking ; //
 // String inputString = "";         // a String to hold incoming data
 
@@ -204,7 +206,7 @@ void processCommands() {
     rightAssentionStepper.disable();
   }// end REV
 
-  //Micro Revolution of motor, 200*256 micro steps 
+  //Micro Revolution of motor, 200*256 micro steps
   //<MICROREV, 1> or <MICROREV, 0> for forward or back
   if (!strcmp("MICROREV", messageFromPC)) {
     long REV_SIZE = 200 * 256L;
@@ -248,7 +250,7 @@ void processCommands() {
 
 void commandMenu()  {
   Serial.println("\f\n===== MerakDubhe Command Menu =====") ;
-  Serial.println("\f\n===== 20220615 13:37 =====") ;
+  Serial.println("===== 20220613 10:33 =====") ;
   Serial.println("HELP for this menu.");
   Serial.println("BREAK, 1/0 for electronic break on/off.");
   Serial.println("STEP, 1/0 for step forward or back.");
@@ -283,9 +285,10 @@ void commandMenu()  {
   //  Serial.println("N to set Number of photos during rail travel.");
   //  Serial.println("M to refresh the Menu.");
 
-  Serial.print("System stepsPerRevolution: ");
-  Serial.println(stepsPerRevolution);
+  //  printMotorAndGear();
   Serial.println(""); //Leave space after menu.
+
+
 
 }// end commandMenu
 
