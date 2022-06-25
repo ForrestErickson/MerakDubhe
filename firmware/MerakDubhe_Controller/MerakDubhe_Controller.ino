@@ -36,6 +36,8 @@
 #include "microL298Stepper.h"   //Library made by Forrest Erickson
 #define BAUDRATE 115200
 
+#define NOT_RELEASE_MOTOR 4  //Use pin D4 pullup for a button to GND that will release the motor and stop tracking.
+
 /*Setup external constants */
 //extern long totalMicroStepsPerRevolution;
 extern const int ENA ;  //Pins for H drivers A and B enable
@@ -67,6 +69,8 @@ void setup()
   Serial.println();
   Serial.println("MerakDubhe_Controller ");
 
+  pinMode(NOT_RELEASE_MOTOR, INPUT_PULLUP);
+
   //  Serial.print("TCCR1B= "); //Printe default TCCR1B
   //  Serial.println(TCCR1B);
   //  TCCR1B = TCCR1B & B11111000 | B00000011; // Set for  clkI/O/64 (From prescaler
@@ -87,9 +91,16 @@ void setup()
 
 void loop()
 {
-
   checkCommandInput();
-  updateTracking();
+
+  //  updateTracking if buttno not pressed;
+  if (digitalRead(NOT_RELEASE_MOTOR)) {
+    //Turn off motor so that it can be moved
+    updateTracking();
+  } else {
+    disableRA_Stepper();    //So that Right Assention motor can be manual set.
+    Serial.println("RELEASE_MOTOR ");
+  }
 
   // Other code
 
