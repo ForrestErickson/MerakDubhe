@@ -20,8 +20,8 @@
   D1  TX
   D2
   D3~
-  D4
-  D5~
+  D4              Button to ground.
+  D5~             Tracking_LED to power.
   D6~              /Focus    ?ring?
   D7               /Shutter  ?tip?
   D8               MOTOR CONTROL
@@ -46,6 +46,8 @@ extern unsigned int multiHitTime;
 
 #define NOT_RELEASE_MOTOR_BUTTON 4  //Use pin D4 pullup for a button to GND that will release the motor and stop tracking.
 
+#define nTracking_LED 5 // Tracking LED from power.
+
 /*Setup external constants */
 //extern long totalMicroStepsPerRevolution;
 extern const int ENA ;  //Pins for H drivers A and B enable
@@ -65,6 +67,16 @@ bool isTracking = true; //  On 20220625 canged to true so that tracking starts a
 bool isNorthTracking = true; //To Do, Save setting for this in EEPROM
 
 //Functions here
+//Function to handle polarity of LED. 
+void TrackingLED (bool stateLED){
+  bool _stateLED =stateLED;
+  if (_stateLED){
+    digitalWrite(nTracking_LED, LOW);
+  }else{
+    digitalWrite(nTracking_LED, HIGH);
+  }//end else
+  
+}// end TrackingLED
 
 //end functions
 
@@ -73,37 +85,29 @@ void setup()
   delay(100);
   Serial.begin(BAUDRATE);
   delay(100);
-  //  while (!Serial);  // wait for serial port to connect. Needed for native USB
-  Serial.println();
-  Serial.println("MerakDubhe_Controller ");
 
-  //  pinMode(NOT_RELEASE_MOTOR_BUTTON, INPUT_PULLUP);
+  //Turn on tracking LED
+  digitalWrite(nTracking_LED, LOW);
+  pinMode (nTracking_LED, OUTPUT);
+
   myButton.set(NOT_RELEASE_MOTOR_BUTTON, buttonEvent, INT_PULL_UP);
   // You can enable long press to use this feature
   myButton.enableLongPress(longPressTime);
   // You can enable multi-hit to use this feature
   myButton.enableMultiHit(multiHitTime, multiHitTarget);
 
-
-  //  Serial.print("TCCR1B= "); //Printe default TCCR1B
+  //  Serial.print("TCCR1B= "); //Print default TCCR1B
   //  Serial.println(TCCR1B);
   //  TCCR1B = TCCR1B & B11111000 | B00000011; // Set for  clkI/O/64 (From prescaler
-  //  Serial.print("TCCR1B= "); //Starts at clkI/O/64 (From prescaler
-  //  Serial.println(TCCR1B);
-
   //Speed up PWM above audio so motor does not sing.
   TCCR1B = TCCR1B & B11111000 | B00000001; // PWM 62745.10 Hz pins 9 and 10, No prescaling,  clkI/O/1.
   //  Serial.print("TCCR1B= ");
   //  Serial.println(TCCR1B);
 
+  // Lock the RA gear at start up.
   rightAssentionStepper.takeMicroStep(isNorthTracking); //Take a step to energize motor
   isTracking = false; //Then turn off tracking.
 
-
-  //setupSerialInput();
-  //  inputString.reserve(200);
-  // printMotorAndGear();   //Remed out of code 20220613
-  //Serial.println("End of setup.");
   commandMenu();
 }//end setup()
 
@@ -114,15 +118,6 @@ void loop()
   checkCommandInput();
 
   updateTracking();
-
-  //  //  updateTracking if buttno not pressed;
-  //  if (digitalRead(NOT_RELEASE_MOTOR_BUTTON)) {
-  //    //Turn off motor so that it can be moved
-  //    updateTracking();
-  //  } else {
-  //    disableRA_Stepper();    //So that Right Assention motor can be manual set.
-  //    Serial.println("RELEASE_MOTOR ");
-  //  }
 
   // Other code
 

@@ -9,7 +9,7 @@
 //Menu Stings Into PROGMEM
 //                             1234567890123456789012345678901234567890    //40 characters max
 const char MENU_0[] PROGMEM = "======= MerakDubhe Command Menu ========"; // "String 0" etc are strings to store - change to suit.
-const char MENU_1[] PROGMEM = "        ===== 20220613 10:33 =====";
+const char MENU_1[] PROGMEM = "        ===== 20220627 17:10 =====";
 const char MENU_2[] PROGMEM = "HELP for this menu.";
 const char MENU_3[] PROGMEM = "BREAK, 1/0 for electronic break on/off";
 const char MENU_4[] PROGMEM = "STEP, 1/0 for step forward or back";
