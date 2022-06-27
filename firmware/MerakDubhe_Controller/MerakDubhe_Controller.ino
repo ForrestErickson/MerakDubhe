@@ -32,6 +32,14 @@
   D13              MOTOR CONTROL
 */
 
+#include <DailyStruggleButton.h>
+
+// Create an instance of DailyStruggleButton
+DailyStruggleButton myButton;
+extern unsigned int longPressTime;
+extern byte multiHitTarget;
+extern unsigned int multiHitTime;
+
 // include the library
 #include "microL298Stepper.h"   //Library made by Forrest Erickson
 #define BAUDRATE 115200
@@ -69,7 +77,13 @@ void setup()
   Serial.println();
   Serial.println("MerakDubhe_Controller ");
 
-  pinMode(NOT_RELEASE_MOTOR_BUTTON, INPUT_PULLUP);
+  //  pinMode(NOT_RELEASE_MOTOR_BUTTON, INPUT_PULLUP);
+  myButton.set(NOT_RELEASE_MOTOR_BUTTON, buttonEvent, INT_PULL_UP);
+  // You can enable long press to use this feature
+  myButton.enableLongPress(longPressTime);
+  // You can enable multi-hit to use this feature
+  myButton.enableMultiHit(multiHitTime, multiHitTarget);
+
 
   //  Serial.print("TCCR1B= "); //Printe default TCCR1B
   //  Serial.println(TCCR1B);
@@ -95,16 +109,20 @@ void setup()
 
 void loop()
 {
+  myButton.poll();
+
   checkCommandInput();
 
-  //  updateTracking if buttno not pressed;
-  if (digitalRead(NOT_RELEASE_MOTOR_BUTTON)) {
-    //Turn off motor so that it can be moved
-    updateTracking();
-  } else {
-    disableRA_Stepper();    //So that Right Assention motor can be manual set.
-    Serial.println("RELEASE_MOTOR ");
-  }
+  updateTracking();
+
+  //  //  updateTracking if buttno not pressed;
+  //  if (digitalRead(NOT_RELEASE_MOTOR_BUTTON)) {
+  //    //Turn off motor so that it can be moved
+  //    updateTracking();
+  //  } else {
+  //    disableRA_Stepper();    //So that Right Assention motor can be manual set.
+  //    Serial.println("RELEASE_MOTOR ");
+  //  }
 
   // Other code
 
