@@ -107,6 +107,7 @@ void setup()
   // Lock the RA gear at start up.
   rightAssentionStepper.takeMicroStep(isNorthTracking); //Take a step to energize motor
   isTracking = false; //Then turn off tracking.
+  TrackingLED(false);
 
   commandMenu();
 }//end setup()

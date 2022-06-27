@@ -58,12 +58,11 @@ void buttonEvent(byte btnStatus) {
 
     // onRelease is indicated when the button is let go
     case onRelease:
-      if (!isLONG_PRESS) {
-        //      Serial.println("Button Released");
-        rightAssentionStepper.takeMicroStep(isNorthTracking); //Take a step to energize motor
-        Serial.println("ENGAGE_MOTOR ");
-        TrackingLED(true);
-      }//if
+      //      Serial.println("Button Released");
+      rightAssentionStepper.takeMicroStep(isNorthTracking); //Take a step to energize motor
+      Serial.println("ENGAGE_MOTOR ");
+      TrackingLED(true);
+      isTracking = true; 
       isLONG_PRESS = false;
       break;
 
