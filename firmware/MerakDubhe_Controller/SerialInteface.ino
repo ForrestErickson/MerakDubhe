@@ -22,9 +22,10 @@ const char MENU_10[] PROGMEM = "MICROREV, 1/0 Rev microSteps=200*256";
 const char MENU_11[] PROGMEM = "STOP, stops stepping and disables motor";
 const char MENU_12[] PROGMEM = "TRACK, 1/0 for tracking on / off";
 const char MENU_13[] PROGMEM = "NORTH, 1/0 for northern or southern";
+const char MENU_14[] PROGMEM = "FOCUS";
 
 // Then set up a table to refer to your MENU strings.
-const char *const MENU_table[] PROGMEM = {MENU_0, MENU_1, MENU_2, MENU_3, MENU_4, MENU_5, MENU_6, MENU_7, MENU_8, MENU_9, MENU_10, MENU_11, MENU_12, MENU_13};
+const char *const MENU_table[] PROGMEM = {MENU_0, MENU_1, MENU_2, MENU_3, MENU_4, MENU_5, MENU_6, MENU_7, MENU_8, MENU_9, MENU_10, MENU_11, MENU_12, MENU_13, MENU_14};
 char buffer[40];  // make sure this is large enough for the largest string it must hold
 
 
@@ -172,7 +173,7 @@ void processCommands() {
   //Command Strings. Use strcmp which returns zero on a match.
   // WAVE command
   if (!strcmp("WAVE", messageFromPC)) {
-//    Serial.println("Message is equal to WAVE");
+    //    Serial.println("Message is equal to WAVE");
     if (integerFromPC != 0) {
       wave(integerFromPC); //wave with number of steps.
     } else {
@@ -182,7 +183,7 @@ void processCommands() {
 
   // MICROWAVE command
   if (!strcmp("MICROWAVE", messageFromPC)) {
-//    Serial.println("Message is equal to MICROWAVE");
+    //    Serial.println("Message is equal to MICROWAVE");
     if (integerFromPC != 0) {
       microWave(integerFromPC); //wave with number of steps.
     } else {
@@ -192,14 +193,14 @@ void processCommands() {
 
   //Print help menu
   if (!strcmp("HELP", messageFromPC)) {
-//    Serial.println("Message is equal to HELP");
+    //    Serial.println("Message is equal to HELP");
     commandMenu();
   }//end help menu
 
   //Set or clear Break
   //<BREAK, 1> or <BREAK, 0>
   if (!strcmp("BREAK", messageFromPC)) {
- //   Serial.println("Message is equal to BREAK");
+    //   Serial.println("Message is equal to BREAK");
     if (integerFromPC != 0) {
       rightAssentionStepper.hold(); //Set Break
     } else {
@@ -210,7 +211,7 @@ void processCommands() {
   //Report COUNT
   //<COUNT>
   if (!strcmp("COUNT", messageFromPC)) {
-//    Serial.println("Message is equal to 'count'");
+    //    Serial.println("Message is equal to 'count'");
     Serial.print("Count = ");
     Serial.println(rightAssentionStepper.counter());
   }// end report count.
@@ -218,7 +219,7 @@ void processCommands() {
   //Take single step
   //<STEP, 1> or <STEP, 0> for forward or back
   if (!strcmp("STEP", messageFromPC)) {
-//    Serial.println("Message is equal to STEP");
+    //    Serial.println("Message is equal to STEP");
     if (integerFromPC != 0) {
       rightAssentionStepper.takestep(true); //step forward
     } else {
@@ -229,7 +230,7 @@ void processCommands() {
   //Revolution of motor, 200 steps
   //<REV, 1> or <REV, 0> for forward or back
   if (!strcmp("REV", messageFromPC)) {
- //   Serial.println("Message is equal to REV");
+    //   Serial.println("Message is equal to REV");
     if (integerFromPC != 0) {//800 quarter steps forward
       for (int i = 0; i < 800; i++) {
         rightAssentionStepper.takestep(true); //step forward
@@ -246,9 +247,9 @@ void processCommands() {
   //<MICROREV, 1> or <MICROREV, 0> for forward or back
   if (!strcmp("MICROREV", messageFromPC)) {
     long REV_SIZE = 200 * 256L;
-//    Serial.println("Message is equal to MICROREV");
-//    Serial.print("REV_SIZE is: ");
-//    Serial.println(REV_SIZE);
+    //    Serial.println("Message is equal to MICROREV");
+    //    Serial.print("REV_SIZE is: ");
+    //    Serial.println(REV_SIZE);
 
     if (integerFromPC != 0) {//800 quarter steps forward
       for (long i = 0; i < (REV_SIZE); i++) {
@@ -265,14 +266,14 @@ void processCommands() {
   //Take micro step 255
   //<STEP, 1> or <STEP, 0> for forward or back
   if (!strcmp("MICRO", messageFromPC)) {
-//    Serial.println("Message is equal to MICRO");
+    //    Serial.println("Message is equal to MICRO");
     rightAssentionStepper.takeMicroStep(integerFromPC);
   }// end single step
 
   //STOP tracking state. Disable electronic break.
   //<STOP> for stopping tracking of RA
   if (!strcmp("STOP", messageFromPC) || !strcmp("stop", messageFromPC)) {
- //   Serial.println("Message is equal to STOP");
+    //   Serial.println("Message is equal to STOP");
     isTracking = false;
     rightAssentionStepper.disable();
   }// end set/clear Tracking
@@ -280,7 +281,7 @@ void processCommands() {
   //Set TRACK state variable
   //<TRACK, 1> or <TRACK, 0> for starting or stopping tracking of RA
   if (!strcmp("TRACK", messageFromPC)) {
- //   Serial.println("Message is equal to TRACK");
+    //   Serial.println("Message is equal to TRACK");
     if (integerFromPC != 0) {
       //Set isTracking;
       isTracking = true;
@@ -293,7 +294,7 @@ void processCommands() {
   //Set NORTH state variable
   //<NORTH, 1> or <NORTH, 0> for starting or stopping tracking of RA
   if (!strcmp("NORTH", messageFromPC)) {
- //   Serial.println("Message is equal to NORTH");
+    //   Serial.println("Message is equal to NORTH");
     if (integerFromPC != 0) {
       //Set isTracking;
       isNorthTracking = true;
@@ -302,6 +303,18 @@ void processCommands() {
       isNorthTracking = false;
     }
   }// end set/clear North direction of tracking
+
+  //Make photograph
+  if (!strcmp("PHOTO", messageFromPC)) {
+    myCanonT3.makePhoto();
+    //    myCanonT3.focusAndPhoto();
+  }// end focus
+
+  //Set focus
+  if (!strcmp("FOCUS", messageFromPC)) {
+    myCanonT3.setAutoFocus();
+  }// end focus
+
 
 }// end processCommands
 

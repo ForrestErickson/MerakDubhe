@@ -33,6 +33,7 @@
 */
 
 #include <DailyStruggleButton.h>
+//#include <CameraControl>
 
 // Create an instance of DailyStruggleButton
 DailyStruggleButton myButton;
@@ -60,22 +61,114 @@ extern const int IN4 ;
 //extern String inputString;
 extern bool stringComplete;
 
+
+
 microL298Stepper rightAssentionStepper(IN1, IN2, ENA, IN3, IN4, ENB);  //Make an object of class type microL298Stepper
+
+/*Wired Camera Control for Focus and Shutter
+   By Forrest Lee Erickson
+   Date: 20220701
+   License: Released into the public domain, dedicated to the public domain
+   Warrentee: This code is designed to kill you and render the earth uninhabitable but is not guarenteed to do so.
+
+   Developed for Canon T3 camera and tested with the same.  See my Railduino project too.
+*/
+
+class WiredCamera {
+    /*  Wiring from Railduino
+        D6~              /Focus    ?ring?
+        D7               /Shutter  ?tip?
+    */
+    const  int nFOCUS = 6;  // Pin assignment. Make low to trigger auto focus.
+    const  int nSHUTTER = 7;  // Pin assignment. Make low to trigger open shutter.
+    const  int  FOCUS_DELAY = 1000;  //mSec delay from focus to shutter release.
+    int _focusPin = nFOCUS;
+    int _shutterPin = nSHUTTER;
+    int _focusDelay = FOCUS_DELAY;
+
+  public:
+    //Set up the pins for this instance.
+    WiredCamera(int focus_Pin, int shutter_Pin)
+    {
+      _focusPin = focus_Pin;
+      _shutterPin = shutter_Pin;
+      _focusDelay = FOCUS_DELAY;
+    }
+
+    void printCameraPins() {
+      Serial.print("Focus pin: ");
+      Serial.println(_focusPin);
+      Serial.print("Shutter pin: ");
+      Serial.println(_shutterPin);
+    }//end printCameraPins
+
+    /*
+       Focus and Shutter pins are high impedance at power up. Set for input just to make sure.
+       Write the ditital output as LOW, but since input the camera is not changed.
+       To activate foucus or shurter release write pinMode from input to output and then back to input.
+    */
+
+    void setupCameraWiredInterface() {
+      pinMode(_focusPin, INPUT);  //Set as input for high impedance.
+      pinMode(_shutterPin, INPUT); // Set as input for high impedance.
+      digitalWrite(_focusPin, LOW);  // Set for pin low to sink current when low impedance.
+      digitalWrite(_shutterPin, LOW);
+      //delay(50);
+    }//end setupCameraWiredInterface
+
+    void setAutoFocus() {
+      // Trigger auto focus before photo
+      pinMode(_focusPin, OUTPUT);  // Make low impedance
+      Serial.print("Focusing! ");
+      delay(_focusDelay);
+      pinMode(_focusPin, INPUT);    //Make high impedance.
+      Serial.println("Focus set");
+    }//end setAutoFocus()
+
+    void focusAndPhoto() {
+      // Trigger auto focus before photo
+      pinMode(_focusPin, OUTPUT);  // Make low impedance
+      Serial.print("Focusing! ");
+      delay(_focusDelay);
+      pinMode(_focusPin, INPUT);    //Make high impedance.
+      Serial.println("Focus set");
+
+    //Shutter release
+      pinMode(_shutterPin, OUTPUT);  // Make low impedance
+      Serial.print("Shutter release ");
+      //delay(_focusDelay);
+      delay(1);
+      pinMode(_shutterPin, INPUT);    //Make high impedance.
+    }//end focusAndPhoto()
+
+    void makePhoto() {
+    //Shutter release
+      pinMode(_shutterPin, OUTPUT);  // Make low impedance
+      Serial.println("Shutter release ");
+      //delay(_focusDelay);
+      delay(500);
+      pinMode(_shutterPin, INPUT);    //Make high impedance.
+    }//end makePhoto()
+
+};//end WiredCamera class
+
+
+WiredCamera myCanonT3(6, 7) ; //Make a camera object
 
 
 bool isTracking = true; //  On 20220625 canged to true so that tracking starts at power up.
 bool isNorthTracking = true; //To Do, Save setting for this in EEPROM
 
 //Functions here
-//Function to handle polarity of LED. 
-void TrackingLED (bool stateLED){
-  bool _stateLED =stateLED;
-  if (_stateLED){
+//Function to handle polarity of LED.
+void TrackingLED (bool stateLED) {
+  bool _stateLED = stateLED;
+  if (_stateLED) {
     digitalWrite(nTracking_LED, LOW);
-  }else{
+  } else {
     digitalWrite(nTracking_LED, HIGH);
   }//end else
-  
+
 }// end TrackingLED
 
 //end functions
@@ -85,6 +178,13 @@ void setup()
   delay(100);
   Serial.begin(BAUDRATE);
   delay(100);
+
+  myCanonT3.setupCameraWiredInterface();
+  myCanonT3.printCameraPins();
+//  myCanonT3.focusAndPhoto();
+//  myCanonT3.setAutoFocus();
+
+  //  setupCameraWiredInterface();
 
   //Turn on tracking LED
   digitalWrite(nTracking_LED, LOW);
