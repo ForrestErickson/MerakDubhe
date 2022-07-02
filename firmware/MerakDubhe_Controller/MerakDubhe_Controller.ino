@@ -65,6 +65,9 @@ extern bool stringComplete;
 
 microL298Stepper rightAssentionStepper(IN1, IN2, ENA, IN3, IN4, ENB);  //Make an object of class type microL298Stepper
 
+bool isTimeLaps = false; //Start out not making photographs
+bool isLastExposure = false; 
+
 /*Wired Camera Control for Focus and Shutter
    By Forrest Lee Erickson
    Date: 20220701
@@ -79,12 +82,20 @@ class WiredCamera {
         D6~              /Focus    ?ring?
         D7               /Shutter  ?tip?
     */
+    //    const  int EXPOSURE_TIME = 30000;  // 30 seconds for time laps
+    const  int EXPOSURE_TIME = 1000;  // 1 second for development.
     const  int nFOCUS = 6;  // Pin assignment. Make low to trigger auto focus.
     const  int nSHUTTER = 7;  // Pin assignment. Make low to trigger open shutter.
     const  int  FOCUS_DELAY = 1000;  //mSec delay from focus to shutter release.
+    //long OffTime;    // milliseconds of off-time
+    const long PHOTO2SD = 3000;    // milliseconds of time to load photo into SD card
+
     int _focusPin = nFOCUS;
     int _shutterPin = nSHUTTER;
     int _focusDelay = FOCUS_DELAY;
+    int _exposureTime = EXPOSURE_TIME;
+    unsigned long previousMillis;    // will store last time LED was
+    bool _isShutterOpen = false;
 
   public:
     //Set up the pins for this instance.
@@ -93,6 +104,7 @@ class WiredCamera {
       _focusPin = focus_Pin;
       _shutterPin = shutter_Pin;
       _focusDelay = FOCUS_DELAY;
+      _isShutterOpen = false;
     }
 
     void printCameraPins() {
@@ -116,6 +128,12 @@ class WiredCamera {
       //delay(50);
     }//end setupCameraWiredInterface
 
+    void setExposureTimeSeconds(int seconds) {
+      _exposureTime = 1000 * seconds; //milliseconds for expsoure time.
+      Serial.print("ExposureTime:  ");
+      Serial.println(seconds);
+    }//end setupCameraWiredInterface
+
     void setAutoFocus() {
       // Trigger auto focus before photo
       pinMode(_focusPin, OUTPUT);  // Make low impedance
@@ -133,7 +151,7 @@ class WiredCamera {
       pinMode(_focusPin, INPUT);    //Make high impedance.
       Serial.println("Focus set");
 
-    //Shutter release
+      //Shutter release
       pinMode(_shutterPin, OUTPUT);  // Make low impedance
       Serial.print("Shutter release ");
       //delay(_focusDelay);
@@ -142,13 +160,37 @@ class WiredCamera {
     }//end focusAndPhoto()
 
     void makePhoto() {
-    //Shutter release
+      //Shutter release
       pinMode(_shutterPin, OUTPUT);  // Make low impedance
       Serial.println("Shutter release ");
       //delay(_focusDelay);
       delay(500);
       pinMode(_shutterPin, INPUT);    //Make high impedance.
     }//end makePhoto()
+
+    //Make photo of time _exposureTime. Updates _isShutterOpen
+    void updateTimeLaps() {
+      unsigned long currentMillis = millis();
+      if (isTimeLaps) {
+        if ((currentMillis - previousMillis >= PHOTO2SD) && !_isShutterOpen) {
+          pinMode(_shutterPin, OUTPUT);  // Make low impedance
+          Serial.println("Shutter open ");
+          previousMillis = previousMillis + PHOTO2SD;  // Update the time
+          _isShutterOpen = true;
+        }//end time has elapsed
+        else if ((currentMillis - previousMillis >= _exposureTime) && _isShutterOpen) {
+          if (isLastExposure){
+            isTimeLaps = false;
+            isLastExposure = false;
+          }//Only stop time laps at end of exposure.
+          pinMode(_shutterPin, INPUT);    //Make high impedance.
+          Serial.println("Shutter closed ");
+          previousMillis = previousMillis + _exposureTime;  // Update the time
+          _isShutterOpen = false;
+        }
+
+      }//end isTimeLaps
+    }//end updateTimeLaps
 
 };//end WiredCamera class
 
@@ -181,9 +223,8 @@ void setup()
 
   myCanonT3.setupCameraWiredInterface();
   myCanonT3.printCameraPins();
-//  myCanonT3.focusAndPhoto();
-//  myCanonT3.setAutoFocus();
-
+  //  myCanonT3.focusAndPhoto();
+  //  myCanonT3.setAutoFocus();
   //  setupCameraWiredInterface();
 
   //Turn on tracking LED
@@ -219,6 +260,8 @@ void loop()
   checkCommandInput();
 
   updateTracking();
+
+  myCanonT3.updateTimeLaps();
 
   // Other code
 

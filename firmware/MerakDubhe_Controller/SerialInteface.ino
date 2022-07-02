@@ -23,9 +23,12 @@ const char MENU_11[] PROGMEM = "STOP, stops stepping and disables motor";
 const char MENU_12[] PROGMEM = "TRACK, 1/0 for tracking on / off";
 const char MENU_13[] PROGMEM = "NORTH, 1/0 for northern or southern";
 const char MENU_14[] PROGMEM = "FOCUS";
+const char MENU_15[] PROGMEM = "EXPOSURE, 'n' in seconds.";
+const char MENU_16[] PROGMEM = "TIMELAPS, 1/0 to make time laps";
+
 
 // Then set up a table to refer to your MENU strings.
-const char *const MENU_table[] PROGMEM = {MENU_0, MENU_1, MENU_2, MENU_3, MENU_4, MENU_5, MENU_6, MENU_7, MENU_8, MENU_9, MENU_10, MENU_11, MENU_12, MENU_13, MENU_14};
+const char *const MENU_table[] PROGMEM = {MENU_0, MENU_1, MENU_2, MENU_3, MENU_4, MENU_5, MENU_6, MENU_7, MENU_8, MENU_9, MENU_10, MENU_11, MENU_12, MENU_13, MENU_14, MENU_15, MENU_16};
 char buffer[40];  // make sure this is large enough for the largest string it must hold
 
 
@@ -289,7 +292,7 @@ void processCommands() {
       //Clear isTracking;
       isTracking = false;
     }
-  }// end set/clear Tracking
+  }// end set/clear Tracking  TIMELAPS
 
   //Set NORTH state variable
   //<NORTH, 1> or <NORTH, 0> for starting or stopping tracking of RA
@@ -316,6 +319,32 @@ void processCommands() {
   }// end focus
 
 
+  //Set exposure in seconds
+  if (!strcmp("EXPOSURE", messageFromPC)) {
+    //   Serial.println("Message is equal to EXPOSURE");
+    if (integerFromPC <= 0) {
+      //Set minimum;
+      myCanonT3.setExposureTimeSeconds(1);
+    } else {
+      myCanonT3.setExposureTimeSeconds(integerFromPC);
+    }
+  }// end set/clear North direction of tracking
+
+
+  //Set TIMELAPS state variable
+  //<TIMELAPS, 1> or <TIMELAPS, 0> for starting or stopping time laps photography
+  if (!strcmp("TIMELAPS", messageFromPC)) {
+    //   Serial.println("Message is equal to TRACK");
+    if (integerFromPC != 0) {
+      //Set making photos.
+      isTimeLaps = true;
+    } else {
+      //Clear making photos
+      //isTimeLaps = false;
+      isLastExposure = true;
+    }
+  }// end set/clear Tracking  TIMELAPS
+  
 }// end processCommands
 
 
