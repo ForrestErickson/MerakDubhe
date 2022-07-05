@@ -33,7 +33,7 @@
 */
 
 #include <DailyStruggleButton.h>
-//#include <CameraControl>
+#include "CameraControl.h"
 
 // Create an instance of DailyStruggleButton
 DailyStruggleButton myButton;
@@ -42,6 +42,7 @@ extern byte multiHitTarget;
 extern unsigned int multiHitTime;
 
 // include the library
+
 #include "microL298Stepper.h"   //Library made by Forrest Erickson
 #define BAUDRATE 115200
 
@@ -66,135 +67,10 @@ extern bool stringComplete;
 microL298Stepper rightAssentionStepper(IN1, IN2, ENA, IN3, IN4, ENB);  //Make an object of class type microL298Stepper
 
 bool isTimeLaps = false; //Start out not making photographs
-bool isLastExposure = false; 
-
-/*Wired Camera Control for Focus and Shutter
-   By Forrest Lee Erickson
-   Date: 20220701
-   License: Released into the public domain, dedicated to the public domain
-   Warrentee: This code is designed to kill you and render the earth uninhabitable but is not guarenteed to do so.
-
-   Developed for Canon T3 camera and tested with the same.  See my Railduino project too.
-*/
-
-class WiredCamera {
-    /*  Wiring from Railduino
-        D6~              /Focus    ?ring?
-        D7               /Shutter  ?tip?
-    */
-    //    const  int EXPOSURE_TIME = 30000;  // 30 seconds for time laps
-    const  int EXPOSURE_TIME = 1000;  // 1 second for development.
-    const  int nFOCUS = 6;  // Pin assignment. Make low to trigger auto focus.
-    const  int nSHUTTER = 7;  // Pin assignment. Make low to trigger open shutter.
-    const  int  FOCUS_DELAY = 1000;  //mSec delay from focus to shutter release.
-    //long OffTime;    // milliseconds of off-time
-    const long PHOTO2SD = 3000;    // milliseconds of time to load photo into SD card
-
-    int _focusPin = nFOCUS;
-    int _shutterPin = nSHUTTER;
-    int _focusDelay = FOCUS_DELAY;
-    int _exposureTime = EXPOSURE_TIME;
-    unsigned long previousMillis;    // will store last time LED was
-    bool _isShutterOpen = false;
-
-  public:
-    //Set up the pins for this instance.
-    WiredCamera(int focus_Pin, int shutter_Pin)
-    {
-      _focusPin = focus_Pin;
-      _shutterPin = shutter_Pin;
-      _focusDelay = FOCUS_DELAY;
-      _isShutterOpen = false;
-    }
-
-    void printCameraPins() {
-      Serial.print("Focus pin: ");
-      Serial.println(_focusPin);
-      Serial.print("Shutter pin: ");
-      Serial.println(_shutterPin);
-    }//end printCameraPins
-
-    /*
-       Focus and Shutter pins are high impedance at power up. Set for input just to make sure.
-       Write the ditital output as LOW, but since input the camera is not changed.
-       To activate foucus or shurter release write pinMode from input to output and then back to input.
-    */
-
-    void setupCameraWiredInterface() {
-      pinMode(_focusPin, INPUT);  //Set as input for high impedance.
-      pinMode(_shutterPin, INPUT); // Set as input for high impedance.
-      digitalWrite(_focusPin, LOW);  // Set for pin low to sink current when low impedance.
-      digitalWrite(_shutterPin, LOW);
-      //delay(50);
-    }//end setupCameraWiredInterface
-
-    void setExposureTimeSeconds(int seconds) {
-      _exposureTime = 1000 * seconds; //milliseconds for expsoure time.
-      Serial.print("ExposureTime:  ");
-      Serial.println(seconds);
-    }//end setupCameraWiredInterface
-
-    void setAutoFocus() {
-      // Trigger auto focus before photo
-      pinMode(_focusPin, OUTPUT);  // Make low impedance
-      Serial.print("Focusing! ");
-      delay(_focusDelay);
-      pinMode(_focusPin, INPUT);    //Make high impedance.
-      Serial.println("Focus set");
-    }//end setAutoFocus()
-
-    void focusAndPhoto() {
-      // Trigger auto focus before photo
-      pinMode(_focusPin, OUTPUT);  // Make low impedance
-      Serial.print("Focusing! ");
-      delay(_focusDelay);
-      pinMode(_focusPin, INPUT);    //Make high impedance.
-      Serial.println("Focus set");
-
-      //Shutter release
-      pinMode(_shutterPin, OUTPUT);  // Make low impedance
-      Serial.print("Shutter release ");
-      //delay(_focusDelay);
-      delay(1);
-      pinMode(_shutterPin, INPUT);    //Make high impedance.
-    }//end focusAndPhoto()
-
-    void makePhoto() {
-      //Shutter release
-      pinMode(_shutterPin, OUTPUT);  // Make low impedance
-      Serial.println("Shutter release ");
-      //delay(_focusDelay);
-      delay(500);
-      pinMode(_shutterPin, INPUT);    //Make high impedance.
-    }//end makePhoto()
-
-    //Make photo of time _exposureTime. Updates _isShutterOpen
-    void updateTimeLaps() {
-      unsigned long currentMillis = millis();
-      if (isTimeLaps) {
-        if ((currentMillis - previousMillis >= PHOTO2SD) && !_isShutterOpen) {
-          pinMode(_shutterPin, OUTPUT);  // Make low impedance
-          Serial.println("Shutter open ");
-          previousMillis = previousMillis + PHOTO2SD;  // Update the time
-          _isShutterOpen = true;
-        }//end time has elapsed
-        else if ((currentMillis - previousMillis >= _exposureTime) && _isShutterOpen) {
-          if (isLastExposure){
-            isTimeLaps = false;
-            isLastExposure = false;
-          }//Only stop time laps at end of exposure.
-          pinMode(_shutterPin, INPUT);    //Make high impedance.
-          Serial.println("Shutter closed ");
-          previousMillis = previousMillis + _exposureTime;  // Update the time
-          _isShutterOpen = false;
-        }
-
-      }//end isTimeLaps
-    }//end updateTimeLaps
-
-};//end WiredCamera class
+bool isLastExposure = false;
 
 
+#include "cameracontrol.h"
 WiredCamera myCanonT3(6, 7) ; //Make a camera object
 
 
@@ -261,7 +137,11 @@ void loop()
 
   updateTracking();
 
-  myCanonT3.updateTimeLaps();
+  if (isTimeLaps) {
+//    Serial.println("Updateing Time Laps from loop().");
+    isTimeLaps = myCanonT3.updateTimeLaps();
+  }
+
 
   // Other code
 
