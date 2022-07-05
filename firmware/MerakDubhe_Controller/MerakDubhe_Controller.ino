@@ -138,7 +138,6 @@ void loop()
   updateTracking();
 
   if (isTimeLaps) {
-//    Serial.println("Updateing Time Laps from loop().");
     isTimeLaps = myCanonT3.updateTimeLaps();
   }
 

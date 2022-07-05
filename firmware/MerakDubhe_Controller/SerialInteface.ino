@@ -257,11 +257,11 @@ void processCommands() {
     if (integerFromPC != 0) {//800 quarter steps forward
       for (long i = 0; i < (REV_SIZE); i++) {
         rightAssentionStepper.takeMicroStep(true); //step forward
-      }
+      }// end steps
     } else {
       for (long i = 0; i < (REV_SIZE); i++) {
         rightAssentionStepper.takeMicroStep(false); //step back
-      }
+      }// end steps
     }//end else
     rightAssentionStepper.disable();
   }// end MICROREV
@@ -286,23 +286,19 @@ void processCommands() {
   if (!strcmp("TRACK", messageFromPC)) {
     //   Serial.println("Message is equal to TRACK");
     if (integerFromPC != 0) {
-      //Set isTracking;
       isTracking = true;
     } else {
-      //Clear isTracking;
       isTracking = false;
     }
   }// end set/clear Tracking  TIMELAPS
 
   //Set NORTH state variable
-  //<NORTH, 1> or <NORTH, 0> for starting or stopping tracking of RA
+  //<NORTH, 1> or <NORTH, 0> for direction of tracking of RA
   if (!strcmp("NORTH", messageFromPC)) {
     //   Serial.println("Message is equal to NORTH");
     if (integerFromPC != 0) {
-      //Set isTracking;
       isNorthTracking = true;
     } else {
-      //Clear isTracking;
       isNorthTracking = false;
     }
   }// end set/clear North direction of tracking
@@ -318,7 +314,6 @@ void processCommands() {
     myCanonT3.setAutoFocus();
   }// end focus
 
-
   //Set exposure in seconds
   if (!strcmp("EXPOSURE", messageFromPC)) {
     //   Serial.println("Message is equal to EXPOSURE");
@@ -330,19 +325,14 @@ void processCommands() {
     }
   }// end set/clear North direction of tracking
 
-
   //Set TIMELAPS state variable
   //<TIMELAPS, 1> or <TIMELAPS, 0> for starting or stopping time laps photography
   if (!strcmp("TIMELAPS", messageFromPC)) {
     //   Serial.println("Message is equal to TRACK");
-    if (integerFromPC != 0) {
-      //Set making photos.
-      isTimeLaps = true;
-    } else {
-      //Clear making photos
-      //isTimeLaps = false;
-      //isLastExposure = true;
-      myCanonT3.setLastExposure(true);
+    if (integerFromPC != 0) {      
+      isTimeLaps = true;  //Set making photos.
+    } else {      
+      myCanonT3.setLastExposure(true); //Set flag so that after expsoure and write to camera end time laps.
     }
   }// end set/clear Tracking  TIMELAPS
   

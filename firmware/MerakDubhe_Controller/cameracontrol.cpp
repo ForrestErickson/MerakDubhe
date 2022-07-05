@@ -41,7 +41,6 @@ void WiredCamera::printCameraPins() {
    Write the ditital output as LOW, but since input the camera is not changed.
    To activate foucus or shurter release write pinMode from input to output and then back to input.
 */
-
 void WiredCamera::setupCameraWiredInterface() {
   pinMode(_focusPin, INPUT);  //Set as input for high impedance.
   pinMode(_shutterPin, INPUT); // Set as input for high impedance.
@@ -53,8 +52,8 @@ void WiredCamera::setupCameraWiredInterface() {
 void WiredCamera::setExposureTimeSeconds(int seconds) {
   _exposureTime = 1000 * seconds; //milliseconds for expsoure time.
   Serial.print("ExposureTime:  ");
-  Serial.println(seconds);
-}//end setupCameraWiredInterface
+  Serial.println(_exposureTime/1000);
+}//end setExposureTimeSeconds
 
 void WiredCamera::setAutoFocus() {
   // Trigger auto focus before photo
@@ -93,21 +92,17 @@ void WiredCamera::makePhoto() {
 void WiredCamera::setLastExposure(bool isLastExposure) {
   // Make local variable
   _isLastExposure = isLastExposure;
-
-}//end setAutoFocus()
+}//end setLastExposure()
 
 //Make photo of time _exposureTime. Updates _isShutterOpen returns isTimeLaps
 //Need to have this setup ready to go when isTimeLaps becomes true.
-//    void updateTimeLaps() {
 bool WiredCamera::updateTimeLaps() {
   unsigned long currentMillis = millis();
-//  static bool _isTimeLaps = true; //We got here so make true.
     if ((currentMillis - _previousMillis >= PHOTO2SD) && !_isShutterOpen) {//Card written so make photo.
       pinMode(_shutterPin, OUTPUT);  // Make low impedance
       Serial.println("Shutter open ");
       _previousMillis = _previousMillis + PHOTO2SD;  // Update the time
       _isShutterOpen = true;
-  //    _isTimeLaps = true;
       return(true); //Shutter not open so we are writing to card.
     }//end time has elapsed
     else if ((currentMillis - _previousMillis >= _exposureTime) && _isShutterOpen) {
@@ -116,7 +111,6 @@ bool WiredCamera::updateTimeLaps() {
       _previousMillis = _previousMillis + _exposureTime;  // Update the time
       _isShutterOpen = false;
       if (_isLastExposure) {
-//        _isTimeLaps = false;
         _isLastExposure = false;
         return(false);//Return is time laps
       }else {
