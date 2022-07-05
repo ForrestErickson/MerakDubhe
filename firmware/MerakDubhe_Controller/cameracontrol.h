@@ -37,6 +37,7 @@ class WiredCamera {
     void makePhoto();
     bool updateTimeLaps();
     void setExposureTimeSeconds(int seconds);
+    void printExposureTime();
     void setLastExposure(bool isLastExposure);
 
   private:

@@ -7,10 +7,8 @@
    Developed for Canon T3 camera and tested with the same.  See my Railduino project too.
 */
 
-
 #include "Arduino.h"
 #include "cameracontrol.h"
-
 
 /*Wired Camera Control for Focus and Shutter
    By Forrest Lee Erickson
@@ -27,7 +25,6 @@ WiredCamera::WiredCamera(int focus_Pin, int shutter_Pin) {
   _focusPin = focus_Pin;
   _shutterPin = shutter_Pin;
 }//end WiredCamera
-
 
 void WiredCamera::printCameraPins() {
   Serial.print("Focus pin: ");
@@ -51,6 +48,12 @@ void WiredCamera::setupCameraWiredInterface() {
 
 void WiredCamera::setExposureTimeSeconds(int seconds) {
   _exposureTime = 1000 * seconds; //milliseconds for expsoure time.
+  Serial.print("ExposureTime:  ");
+  Serial.println(_exposureTime/1000);
+}//end setExposureTimeSeconds
+
+void WiredCamera::printExposureTime() {
+//  _exposureTime = 1000 * seconds; //milliseconds for expsoure time.
   Serial.print("ExposureTime:  ");
   Serial.println(_exposureTime/1000);
 }//end setExposureTimeSeconds

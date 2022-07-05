@@ -54,6 +54,7 @@ void commandMenu()  {
     strcpy_P(buffer, (char *)pgm_read_word(&(MENU_table[i])));  // Necessary casts and dereferencing, just copy.
     Serial.println(buffer);
   }
+  myCanonT3.printExposureTime();  //Print exposure time
   Serial.println(""); //Leave space after menu.
 }// end commandMenu
 
@@ -329,13 +330,13 @@ void processCommands() {
   //<TIMELAPS, 1> or <TIMELAPS, 0> for starting or stopping time laps photography
   if (!strcmp("TIMELAPS", messageFromPC)) {
     //   Serial.println("Message is equal to TRACK");
-    if (integerFromPC != 0) {      
+    if (integerFromPC != 0) {
       isTimeLaps = true;  //Set making photos.
-    } else {      
+    } else {
       myCanonT3.setLastExposure(true); //Set flag so that after expsoure and write to camera end time laps.
     }
   }// end set/clear Tracking  TIMELAPS
-  
+
 }// end processCommands
 
 
