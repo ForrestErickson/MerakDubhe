@@ -309,6 +309,7 @@ void processCommands() {
   if (!strcmp("TRACK", messageFromPC)) {
     //   Serial.println("Message is equal to TRACK");
     if (integerFromPC != 0) {
+//      myCanonT3.restartTimeLaps();
       isTimeLaps = true;
       isTracking = true;
       TrackingLED(true);
@@ -361,6 +362,7 @@ void processCommands() {
     //   Serial.println("Message is equal to TRACK");
     if (integerFromPC != 0) {
       isTimeLaps = true;  //Set making photos.
+//      myCanonT3.restartTimeLaps();
     } else {
       myCanonT3.setLastExposure(true); //Set flag so that after expsoure and write to camera end time laps.
     }

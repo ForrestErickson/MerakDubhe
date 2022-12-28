@@ -103,6 +103,11 @@ void WiredCamera::setLastExposure(bool isLastExposure) {
   _isLastExposure = isLastExposure;
 }//end setLastExposure()
 
+//Restart the millis timing before update time Laps.
+void  WiredCamera::restartTimeLaps() {
+  _previousMillis = millis(); //
+}
+
 //Make photo of time _exposureTime. Updates _isShutterOpen returns isTimeLaps
 //Need to have this setup ready to go when isTimeLaps becomes true.
 bool WiredCamera::updateTimeLaps() {

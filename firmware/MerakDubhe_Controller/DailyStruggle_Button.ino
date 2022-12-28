@@ -62,6 +62,7 @@ void buttonEvent(byte btnStatus) {
       rightAssentionStepper.takeMicroStep(isNorthTracking); //Take a step to energize motor
       Serial.println("ENGAGE_MOTOR ");
       TrackingLED(true);
+//      myCanonT3.restartTimeLaps();
       isTimeLaps = true;
       isTracking = true;
       isLONG_PRESS = false;
@@ -101,6 +102,7 @@ void buttonEvent(byte btnStatus) {
       //      Serial.print(multiHitTime);
       //      Serial.println("ms");
       Serial.println("Tracking true ");
+//      myCanonT3.restartTimeLaps();
       isTimeLaps = true; //Then turn on exposing.
       isTracking = true; //Then turn on tracking.
       rightAssentionStepper.takeMicroStep(isNorthTracking); //Take a step to energize motor
