@@ -46,9 +46,9 @@ void WiredCamera::setupCameraWiredInterface() {
   //delay(50);
 }//end setupCameraWiredInterface
 
-void WiredCamera::setExposureTimeSeconds(int seconds) {
+void WiredCamera::setExposureTimeSeconds(long seconds) {
   _exposureTime = 1000 * seconds; //milliseconds for expsoure time.
-  Serial.print("ExposureTime:  ");
+  Serial.print("Set ExposureTime:  ");
   Serial.println(_exposureTime/1000);
 }//end setExposureTimeSeconds
 

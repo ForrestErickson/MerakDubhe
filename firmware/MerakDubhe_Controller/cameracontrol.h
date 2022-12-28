@@ -14,12 +14,13 @@
 class WiredCamera {
 
   public:
-      /*  Wiring from Railduino
-        D6~              /Focus    ?ring?
-        D7               /Shutter  ?tip?
+    /*  Wiring from Railduino
+      D6~              /Focus    ?ring?
+      D7               /Shutter  ?tip?
     */
-    //    const  int EXPOSURE_TIME = 30000;  // 30 seconds for time laps
-    const  int EXPOSURE_TIME = 1000;  // 1 second for development.
+    const  long EXPOSURE_TIME = 70000;  // 70 seconds for max exposure, Noise cancelation and some overhead
+    //const  long EXPOSURE_TIME = 30000;  // 30 seconds for time laps
+    //const  long EXPOSURE_TIME = 1000;  // 1 second for development.
     const  int nFOCUS = 6;  // Pin assignment. Make low to trigger auto focus.
     const  int nSHUTTER = 7;  // Pin assignment. Make low to trigger open shutter.
     const  int  FOCUS_DELAY = 1000;  //mSec delay from focus to shutter release.
@@ -36,17 +37,17 @@ class WiredCamera {
     void focusAndPhoto();
     void makePhoto();
     bool updateTimeLaps();
-    void setExposureTimeSeconds(int seconds);
+    void setExposureTimeSeconds(long seconds);
     void printExposureTime();
     void setLastExposure(bool isLastExposure);
 
   private:
-//    int _focusPin = focus_Pin;
-//    int _shutterPin = shutter_Pin;
+    //    int _focusPin = focus_Pin;
+    //    int _shutterPin = shutter_Pin;
     int _focusPin = nFOCUS;
     int _shutterPin = nSHUTTER;
     int _focusDelay = FOCUS_DELAY;
-    int _exposureTime = EXPOSURE_TIME;
+    long _exposureTime = EXPOSURE_TIME;
     unsigned long _previousMillis = 0;    // will store last time LED was
     bool _isShutterOpen = false;
     bool _isLastExposure = false; //Lets start able to make expsoures.

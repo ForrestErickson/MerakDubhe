@@ -9,7 +9,7 @@
 //Menu Stings Into PROGMEM
 //                             1234567890123456789012345678901234567890    //40 characters max
 const char MENU_0[] PROGMEM = "======= MerakDubhe Command Menu ========"; // "String 0" etc are strings to store - change to suit.
-const char MENU_1[] PROGMEM = "        ===== 20220704 17:56 =====";
+const char MENU_1[] PROGMEM = "        ===== 20221227 22:31 =====";
 const char MENU_2[] PROGMEM = "HELP for this menu.";
 const char MENU_3[] PROGMEM = "BREAK, 1/0 for electronic break on/off";
 const char MENU_4[] PROGMEM = "STEP, 1/0 for step forward or back";
@@ -279,6 +279,7 @@ void processCommands() {
   if (!strcmp("STOP", messageFromPC) || !strcmp("stop", messageFromPC)) {
     //   Serial.println("Message is equal to STOP");
     isTracking = false;
+    TrackingLED(false);
     rightAssentionStepper.disable();
   }// end set/clear Tracking
 
@@ -288,8 +289,10 @@ void processCommands() {
     //   Serial.println("Message is equal to TRACK");
     if (integerFromPC != 0) {
       isTracking = true;
+      TrackingLED(true);
     } else {
       isTracking = false;
+      TrackingLED(false);
     }
   }// end set/clear Tracking  TIMELAPS
 
@@ -317,12 +320,14 @@ void processCommands() {
 
   //Set exposure in seconds
   if (!strcmp("EXPOSURE", messageFromPC)) {
-    //   Serial.println("Message is equal to EXPOSURE");
+       Serial.print("Message equal to EXPOSURE:");
     if (integerFromPC <= 0) {
       //Set minimum;
       myCanonT3.setExposureTimeSeconds(1);
     } else {
       myCanonT3.setExposureTimeSeconds(integerFromPC);
+       Serial.print("Value FROM pc is equal to EXPOSURE:");
+       Serial.println(integerFromPC);
     }
   }// end set/clear North direction of tracking
 

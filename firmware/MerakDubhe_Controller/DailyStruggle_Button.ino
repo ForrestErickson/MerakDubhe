@@ -79,6 +79,7 @@ void buttonEvent(byte btnStatus) {
       //      Serial.print(longPressTime);
       //      Serial.println("ms");
       isTracking = false; //Then turn off tracking.
+      TrackingLED(false);
       disableRA_Stepper();    //So that Right Assention motor can be manual set.
       Serial.println("RELEASE_MOTOR ");
       isLONG_PRESS = true;
