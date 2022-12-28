@@ -9,7 +9,7 @@
 //Menu Stings Into PROGMEM
 //                             1234567890123456789012345678901234567890    //40 characters max
 const char MENU_0[] PROGMEM = "======= MerakDubhe Command Menu ========"; // "String 0" etc are strings to store - change to suit.
-const char MENU_1[] PROGMEM = "        ===== 20221227 22:31 =====";
+const char MENU_1[] PROGMEM = "  Version  ===== 20221228 15:15 =====";
 const char MENU_2[] PROGMEM = "HELP for this menu.";
 const char MENU_3[] PROGMEM = "BREAK, 1/0 for electronic break on/off";
 const char MENU_4[] PROGMEM = "STEP, 1/0 for step forward or back";
@@ -54,10 +54,29 @@ void commandMenu()  {
     strcpy_P(buffer, (char *)pgm_read_word(&(MENU_table[i])));  // Necessary casts and dereferencing, just copy.
     Serial.println(buffer);
   }
-  myCanonT3.printExposureTime();  //Print exposure time
-  Serial.println(""); //Leave space after menu.
+  printMountStatus();
 }// end commandMenu
 
+
+void printMountStatus() {
+  Serial.println("\nMOUNT STATUS: ");
+
+  //Report isTimeLaps status
+  Serial.print("isTimeLaps is (makeing exposures): ");
+  Serial.println(isTimeLaps);
+
+  //Report tracking status
+  Serial.print("Tracking is: ");
+  Serial.println(isTracking);
+
+  Serial.print("North tracking is: ");
+  Serial.println(isNorthTracking);
+
+  myCanonT3.printExposureCount();  //Print exposure count
+
+  myCanonT3.printExposureTime();  //Print exposure time
+  Serial.println(""); //Leave space after menu.
+}//end printMountStatus
 
 /* initialize serial:  */
 void setupSerialInput() {
@@ -278,6 +297,8 @@ void processCommands() {
   //<STOP> for stopping tracking of RA
   if (!strcmp("STOP", messageFromPC) || !strcmp("stop", messageFromPC)) {
     //   Serial.println("Message is equal to STOP");
+    myCanonT3.setLastExposure(true); //Set flag so that after expsoure and write to camera end time laps.
+//    isTimeLaps = false;
     isTracking = false;
     TrackingLED(false);
     rightAssentionStepper.disable();
@@ -288,9 +309,12 @@ void processCommands() {
   if (!strcmp("TRACK", messageFromPC)) {
     //   Serial.println("Message is equal to TRACK");
     if (integerFromPC != 0) {
+      isTimeLaps = true;
       isTracking = true;
       TrackingLED(true);
     } else {
+      myCanonT3.setLastExposure(true); //Set flag so that after expsoure and write to camera end time laps.
+//      isTimeLaps = false;
       isTracking = false;
       TrackingLED(false);
     }
@@ -320,14 +344,14 @@ void processCommands() {
 
   //Set exposure in seconds
   if (!strcmp("EXPOSURE", messageFromPC)) {
-//       Serial.print("Message is equal to 'EXPOSURE'");
+    //       Serial.print("Message is equal to 'EXPOSURE'");
     if (integerFromPC <= 0) {
       //Set minimum;
       myCanonT3.setExposureTimeSeconds(1);
     } else {
       myCanonT3.setExposureTimeSeconds(integerFromPC);
-//       Serial.print("Value FROM pc is equal to EXPOSURE:");
-//       Serial.println(integerFromPC);
+      //       Serial.print("Value FROM pc is equal to EXPOSURE:");
+      //       Serial.println(integerFromPC);
     }
   }// end set/clear North direction of tracking
 

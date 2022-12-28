@@ -32,7 +32,7 @@ class microL298Stepper
     void takestep(boolean invert);
     void takeMicroStep(boolean invert);
     long longCounter(); // Returns _longCounter
-    int counter(); // Returns _counter
+    long int counter(); // Returns _counter
     byte *steps1024(int count);
 
   private:
@@ -42,7 +42,7 @@ class microL298Stepper
     int _coil2b;
     int _pwm1;
     int _pwm2;
-    int _counter;
+    long int _counter;
     long _longCounter = 0;
     boolean _invert;
 

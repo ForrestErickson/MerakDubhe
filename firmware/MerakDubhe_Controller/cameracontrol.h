@@ -18,9 +18,9 @@ class WiredCamera {
       D6~              /Focus    ?ring?
       D7               /Shutter  ?tip?
     */
-    const  unsigned long EXPOSURE_TIME = 70000;  // 70 seconds for max exposure, Noise cancelation and some overhead
+//    const  unsigned long EXPOSURE_TIME = 70000;  // 70 seconds for max exposure, Noise cancelation and some overhead
     //const  unsigned long EXPOSURE_TIME = 30000;  // 30 seconds for time laps
-    //const  unsigned long EXPOSURE_TIME = 1000;  // 1 second for development.
+    const  unsigned long EXPOSURE_TIME = 1000;  // 1 second for development.
     const  int nFOCUS = 6;  // Pin assignment. Make low to trigger auto focus.
     const  int nSHUTTER = 7;  // Pin assignment. Make low to trigger open shutter.
     const  int  FOCUS_DELAY = 1000;  //mSec delay from focus to shutter release.
@@ -39,6 +39,7 @@ class WiredCamera {
     bool updateTimeLaps();
     void setExposureTimeSeconds(unsigned long seconds);
     void printExposureTime();
+    void printExposureCount();
     void setLastExposure(bool isLastExposure);
 
   private:
@@ -49,6 +50,7 @@ class WiredCamera {
     int _focusDelay = FOCUS_DELAY;
     unsigned long _exposureTime = EXPOSURE_TIME;
     unsigned long _previousMillis = 0;    // will store last time LED was
+    unsigned long _exposureCount=0;
     bool _isShutterOpen = false;
     bool _isLastExposure = false; //Lets start able to make expsoures.
 

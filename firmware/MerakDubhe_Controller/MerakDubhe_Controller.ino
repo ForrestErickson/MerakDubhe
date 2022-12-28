@@ -66,7 +66,9 @@ extern bool stringComplete;
 
 microL298Stepper rightAssentionStepper(IN1, IN2, ENA, IN3, IN4, ENB);  //Make an object of class type microL298Stepper
 
-bool isTimeLaps = false; //Start out not making photographs
+unsigned long exposureCount = 0;
+//bool isTimeLaps = false; //Start out not making photographs
+bool isTimeLaps = true; //Start out making photographs
 bool isLastExposure = false;
 
 
@@ -98,7 +100,7 @@ void setup()
   delay(100);
 
   myCanonT3.setupCameraWiredInterface();
-  myCanonT3.printCameraPins();
+  //  myCanonT3.printCameraPins();
   //  myCanonT3.focusAndPhoto();
   //  myCanonT3.setAutoFocus();
   //  setupCameraWiredInterface();

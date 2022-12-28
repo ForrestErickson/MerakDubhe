@@ -34,8 +34,8 @@ microL298Stepper::microL298Stepper(int coil1a, int coil1b, int pwm1, int coil2a,
   _counter = 0;
 }//Class decleration
 
-//long microL298Stepper::counter(){
-int microL298Stepper::counter() {
+long microL298Stepper::counter(){
+//int microL298Stepper::counter() {
   return (_counter);
 }// end counter
 
@@ -136,9 +136,10 @@ void microL298Stepper::takeMicroStep(boolean invert)
   //  p = _steps1024(0);
   p = _steps1024(_counter);
 
-  //  Serial.print(_counter);
-  Serial.print("Microstep count: ");
-  Serial.println(_longCounter);
+//Print out the step status.
+//  Serial.print(_counter);
+//  Serial.print("  Microstep count: ");
+//  Serial.println(_longCounter);
 
   //  Serial.print("p= ");
   //  //  Serial.print(*p);

@@ -58,6 +58,12 @@ void WiredCamera::printExposureTime() {
   Serial.println(_exposureTime/1000);
 }//end setExposureTimeSeconds
 
+void WiredCamera::printExposureCount() {
+
+  Serial.print("ExposureCount:  ");
+  Serial.println(_exposureCount);
+}//end setExposureTimeSeconds
+
 void WiredCamera::setAutoFocus() {
   // Trigger auto focus before photo
   pinMode(_focusPin, OUTPUT);  // Make low impedance
@@ -102,6 +108,7 @@ void WiredCamera::setLastExposure(bool isLastExposure) {
 bool WiredCamera::updateTimeLaps() {
   unsigned long currentMillis = millis();
     if ((currentMillis - _previousMillis >= PHOTO2SD) && !_isShutterOpen) {//Card written so make photo.
+      _exposureCount++;
       pinMode(_shutterPin, OUTPUT);  // Make low impedance
       Serial.println("Shutter open ");
       _previousMillis = _previousMillis + PHOTO2SD;  // Update the time

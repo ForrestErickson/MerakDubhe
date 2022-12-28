@@ -62,7 +62,8 @@ void buttonEvent(byte btnStatus) {
       rightAssentionStepper.takeMicroStep(isNorthTracking); //Take a step to energize motor
       Serial.println("ENGAGE_MOTOR ");
       TrackingLED(true);
-      isTracking = true; 
+      isTimeLaps = true;
+      isTracking = true;
       isLONG_PRESS = false;
       break;
 
@@ -78,6 +79,11 @@ void buttonEvent(byte btnStatus) {
       //      Serial.print("Buttong Long Pressed For ");
       //      Serial.print(longPressTime);
       //      Serial.println("ms");
+
+
+//foo      isTimeLaps = false; //Then turn off exposing.
+      myCanonT3.setLastExposure(true); //Set flag so that after expsoure and write to camera end time laps.
+
       isTracking = false; //Then turn off tracking.
       TrackingLED(false);
       disableRA_Stepper();    //So that Right Assention motor can be manual set.
@@ -95,6 +101,7 @@ void buttonEvent(byte btnStatus) {
       //      Serial.print(multiHitTime);
       //      Serial.println("ms");
       Serial.println("Tracking true ");
+      isTimeLaps = true; //Then turn on exposing.
       isTracking = true; //Then turn on tracking.
       rightAssentionStepper.takeMicroStep(isNorthTracking); //Take a step to energize motor
       TrackingLED(true);
