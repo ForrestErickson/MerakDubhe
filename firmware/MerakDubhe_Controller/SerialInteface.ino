@@ -320,14 +320,14 @@ void processCommands() {
 
   //Set exposure in seconds
   if (!strcmp("EXPOSURE", messageFromPC)) {
-       Serial.print("Message equal to EXPOSURE:");
+//       Serial.print("Message is equal to 'EXPOSURE'");
     if (integerFromPC <= 0) {
       //Set minimum;
       myCanonT3.setExposureTimeSeconds(1);
     } else {
       myCanonT3.setExposureTimeSeconds(integerFromPC);
-       Serial.print("Value FROM pc is equal to EXPOSURE:");
-       Serial.println(integerFromPC);
+//       Serial.print("Value FROM pc is equal to EXPOSURE:");
+//       Serial.println(integerFromPC);
     }
   }// end set/clear North direction of tracking
 
