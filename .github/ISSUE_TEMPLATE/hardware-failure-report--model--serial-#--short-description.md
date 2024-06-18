@@ -7,12 +7,12 @@ assignees: ForrestErickson
 
 ---
 
-**Describe the Failure / Bug**
-A clear and concise description of what the failure / bug is.
+**Describe the Failure / Bug**  
+_A clear and concise description of what the failure / bug is._
 Short Summary of the expected behavior:
 Short Summary of the buggy behavior:
 
-**Device Under Test, aka DUT**
+**Device Under Test, aka DUT**  
 Steps to reproduce the behavior:  
 1. Model Number:   
 2. Serial Number(s):   
@@ -30,11 +30,11 @@ Steps to reproduce the behavior:
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Expected behavior** 
+_A clear and concise description of what you expected to happen._
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+_If applicable, add screenshots to help explain your problem._
 
 **Hardware description
 Model:
@@ -46,5 +46,5 @@ Model:
 Serial Number:
 
 
-**Additional context**
-Add any other context about the problem here.
+**Additional context** 
+_Add any other context about the problem here._
